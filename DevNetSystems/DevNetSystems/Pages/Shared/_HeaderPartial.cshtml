@@ -9,12 +9,12 @@
 
         <nav id="navmenu" class="navmenu">
             <ul>
-                <li><a href="/" class="active">Home</a></li>
-                <li><a href="/Services">Services</a></li>
-                <li><a href="/About">About</a></li>
+                <li><a href="/" class='@(ViewBag.PageName == "Home" ? "active" :"")'>Home</a></li>
+                <li><a href="/Services" class='@(ViewBag.PageName == "Services" ? "active" : "")'>Services</a></li>
+                <li><a href="/About" class='@(ViewBag.PageName == "About" ? "active" : "")'>About</a></li>
                 @* <li><a href="#portfolio">Portfolio</a></li> *@
-                <li><a href="/Privacy">Privacy Policy</a></li>
-                <li><a href="/Contact">Contact</a></li>
+                <li><a href="/Privacy" class='@(ViewBag.PageName == "Privacy" ? "active" : "")'>Privacy Policy</a></li>
+                <li><a href="/Contact" class='@(ViewBag.PageName == "Contact" ? "active" : "")'>Contact</a></li>
             </ul>
             <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
         </nav>
