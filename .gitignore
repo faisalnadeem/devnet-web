@@ -1,0 +1,8 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/DevNetSystems/DevNetSystems/bin/Debug/net8.0
+/DevNetSystems/DevNetSystems/obj
+/DevNetSystems/DevNetSystems/Properties
+/DevNetSystems/.vs
