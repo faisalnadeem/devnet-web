@@ -864,7 +864,7 @@ section,
 --------------------------------------------------------------*/
 .page-header {
   width: 100%;
-  min-height: 40vh;
+  min-height: 80vh;
   position: relative;
   padding: 125px 0;
   display: flex;
