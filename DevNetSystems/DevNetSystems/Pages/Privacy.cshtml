@@ -2,7 +2,25 @@
 @model PrivacyModel
 @{
     ViewData["Title"] = "Privacy Policy";
+    ViewData["PageTitle"] = "Safeguarding Your Data with Trust";
+    ViewData["PageDescription"] = "Committed to Transparency & Trust";
+    ViewData["ImagePath"] = "img/site-images/dev-ing.jpeg";
 }
-<h1>@ViewData["Title"]</h1>
+<partial name="Shared/_PageHeaderPartial"/>
+<section id="privacy" class="privacy section">
 
-<p>Use this page to detail your site's privacy policy.</p>
+    <!-- Section Title -->
+    <div class="container section-title" data-aos="fade-up">
+        <h2>Privacy Policy</h2>
+        <p>Use this page to detail your site's privacy policy.</p>
+    </div><!-- End Section Title -->
+
+    <div class="container" data-aos="fade-up" data-aos-delay="100">
+        <div class="row">
+            <div class="col-lg-12">
+                <p>Privacy policy content goes here.</p>
+            </div>
+        </div>
+    </div>
+
+</section><!-- /Privacy Section -->
