@@ -1344,11 +1344,12 @@ section,
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  transition: transform 0.3s ease;
+  transition: transform 0.3s ease, filter 0.3s ease;
 }
 
 .services .service-card:hover .service-card-bg {
   transform: scale(1.1);
+  filter: blur(3px);
 }
 
 .services .service-card-bg::before {
