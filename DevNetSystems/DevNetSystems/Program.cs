@@ -2,6 +2,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+builder.Services.AddScoped<DevNetSystems.Services.IEmailService, DevNetSystems.Services.EmailService>();
 
 var app = builder.Build();
 

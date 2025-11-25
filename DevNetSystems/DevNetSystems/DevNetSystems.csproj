@@ -10,4 +10,8 @@
     <Folder Include="wwwroot\img\site-images\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="MailKit" Version="4.3.0" />
+  </ItemGroup>
+
 </Project>
