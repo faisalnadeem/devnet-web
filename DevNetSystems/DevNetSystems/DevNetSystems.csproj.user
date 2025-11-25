@@ -4,5 +4,6 @@
     <ActiveDebugProfile>https</ActiveDebugProfile>
     <RazorPage_SelectedScaffolderID>RazorPageScaffolder</RazorPage_SelectedScaffolderID>
     <RazorPage_SelectedScaffolderCategoryPath>root/Common/RazorPage</RazorPage_SelectedScaffolderCategoryPath>
+    <NameOfLastUsedPublishProfile>C:\src\devnet-web\DevNetSystems\DevNetSystems\Properties\PublishProfiles\devnetsystems - Zip Deploy.pubxml</NameOfLastUsedPublishProfile>
   </PropertyGroup>
 </Project>
