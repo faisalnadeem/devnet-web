@@ -1,0 +1,12 @@
+@page
+@model ProductsModel
+@{
+    ViewData["Title"] = "Products";
+    ViewData["PageName"] = "Products";
+    ViewData["PageTitle"] = "Our Products and Applications";
+    ViewData["PageDescription"] = "Software Solutions Built for You";
+    ViewData["ImagePath"] = "img/site-images/products.jpeg";
+}
+<partial name="Shared/_PageHeaderPartial"/>
+<!-- Products Section -->
+<partial name="Shared/_ProductsItemsPartial"/>

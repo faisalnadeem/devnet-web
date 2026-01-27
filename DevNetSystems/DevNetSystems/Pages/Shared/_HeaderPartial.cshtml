@@ -1,4 +1,4 @@
-﻿<header id="header" class="header d-flex align-items-center fixed-top">
+<header id="header" class="header d-flex align-items-center fixed-top">
     <div class="container position-relative d-flex align-items-center justify-content-between">
 
         <a href="/" class="logo d-flex align-items-center me-auto me-xl-0">
@@ -11,6 +11,7 @@
             <ul>
                 <li><a href="/" class='@(ViewBag.PageName == "Home" ? "active" :"")'>Home</a></li>
                 <li><a href="/Services" class='@(ViewBag.PageName == "Services" ? "active" : "")'>Services</a></li>
+                <li><a href="/Products" class='@(ViewBag.PageName == "Products" ? "active" : "")'>Products</a></li>
                 <li><a href="/About" class='@(ViewBag.PageName == "About" ? "active" : "")'>About</a></li>
                 @* <li><a href="#portfolio">Portfolio</a></li> *@
                 <li><a href="/Privacy" class='@(ViewBag.PageName == "Privacy" ? "active" : "")'>Privacy Policy</a></li>
