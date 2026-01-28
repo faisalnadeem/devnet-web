@@ -1,3 +1,12 @@
+@model ProductsModel
+@{
+    ViewData["Title"] = "Products";
+    ViewData["PageName"] = "Products";
+    ViewData["PageTitle"] = "Our Products and Applications";
+    ViewData["PageDescription"] = "Software Solutions Built for You";
+    ViewData["ImagePath"] = "img/site-images/products.jpeg";
+}
+
 <!-- Products Section -->
 <section id="products" class="products section">
     <div class="container section-title" data-aos="fade-up">
@@ -12,89 +21,19 @@
 
         <div class="row gy-4">
 
-            <!-- Product 1 - Route Knots -->
-            <div class="col-lg-6 col-md-6" data-aos="fade-up" data-aos-delay="100">
-                <a href="https://routeknots.com/" target="_blank" rel="noopener noreferrer" class="product-card">
-                    <div class="product-card-bg" style="background-image: url('img/site-images/routeknots.jpg');"></div>
-                    <div class="product-card-content">
-                        <h3>RouteKnots</h3>
-                        <p>RouteKnots is an intelligent route planning application that allows users to create optimized routes from point A to point B with multiple customizable stops in between. The app automatically calculates the most efficient route based on the starting and ending locations. Users can view these optimized routes directly on Google Maps and save them for future reference through route history tracking.</p>
-                        <span class="product-card-cta">Visit Site <i class="bi bi-arrow-right"></i></span>
-                    </div>
-                </a>
-            </div><!-- End Product Item -->
-
-            <!-- Product 2 - Optaxia -->
-            <div class="col-lg-6 col-md-6" data-aos="fade-up" data-aos-delay="200">
-                <a href="https://optaxia.com" target="_blank" rel="noopener noreferrer" class="product-card">
-                    <div class="product-card-bg" style="background-image: url('img/site-images/optaxia.jpeg');"></div>
-                    <div class="product-card-content">
-                        <h3>Optaxia</h3>
-                        <p>Optaxia is a geo-enabled image capture and management application designed for accurate location-based documentation. Users can capture or import images embedded with precise geographic coordinates, including latitude and longitude. All images are securely stored on the cloud, making it ideal for professionals who require verified location data with every photograph.</p>
-                        <span class="product-card-cta">Visit Site <i class="bi bi-arrow-right"></i></span>
-                    </div>
-                </a>
-            </div><!-- End Product Item -->
-
-            <!-- Product 3 - Aythen -->
-            <div class="col-lg-6 col-md-6" data-aos="fade-up" data-aos-delay="300">
-                <a href="https://aythen.com" target="_blank" rel="noopener noreferrer" class="product-card">
-                    <div class="product-card-bg" style="background-image: url('img/site-images/aythen.jpg');"></div>
-                    <div class="product-card-content">
-                        <h3>Aythen</h3>
-                        <p>Aythen is an AI-powered conversational platform that helps businesses automatically capture and engage leads from Facebook in real time. It uses intelligent question flows and eligibility logic to qualify prospects instantly. By automating conversations and lead screening, Aythen enables faster responses, improved engagement, and higher conversion rates with minimal manual effort.</p>
-                        <span class="product-card-cta">Visit Site <i class="bi bi-arrow-right"></i></span>
-                    </div>
-                </a>
-            </div><!-- End Product Item -->
-
-            <!-- Product 4 - PasLogic -->
-            <div class="col-lg-6 col-md-6" data-aos="fade-up" data-aos-delay="400">
-                <a href="https://paslogic.com/" target="_blank" rel="noopener noreferrer" class="product-card">
-                    <div class="product-card-bg" style="background-image: url('img/site-images/paslogic.jpg');"></div>
-                    <div class="product-card-content">
-                        <h3>PasLogic</h3>
-                        <p>PasLogic is a cutting-edge software solution built specifically for ECO providers and Green Deal installers to streamline and optimize their business operations. Developed in line with industry regulations and governing body principles, it enhances workflow efficiency and operational performance. With a focus on innovation and future-ready technology, PasLogic continuously evolves to meet changing market demands and industry needs.</p>
-                        <span class="product-card-cta">Visit Site <i class="bi bi-arrow-right"></i></span>
-                    </div>
-                </a>
-            </div><!-- End Product Item -->
-
-            <!-- Product 5 - Gripoints -->
-            <div class="col-lg-6 col-md-6" data-aos="fade-up" data-aos-delay="500">
-                <a href="https://gripoints.com" target="_blank" rel="noopener noreferrer" class="product-card">
-                    <div class="product-card-bg" style="background-image: url('img/site-images/childrengrowth.jpg');"></div>
-                    <div class="product-card-content">
-                        <h3>Gripoints</h3>
-                        <p>Gripoints is a task-based reward management platform designed to help parents guide their children's growth through positive reinforcement. Parents can assign meaningful tasks, track progress, and reward achievements transparently within a single platform. The system encourages responsibility, discipline, and healthy habits while strengthening parent–child engagement.</p>
-                        <span class="product-card-cta">Visit Site <i class="bi bi-arrow-right"></i></span>
-                    </div>
-                </a>
-            </div>
-
-            <!-- Product 6 - RetroKnots -->
-            <div class="col-lg-6 col-md-6" data-aos="fade-up" data-aos-delay="500">
-                <a href="https://retroknots.com/" target="_blank" rel="noopener noreferrer" class="product-card">
-                    <div class="product-card-bg" style="background-image: url('img/site-images/retroknots.jpg');"></div>
-                    <div class="product-card-content">
-                        <h3>RetroKnots</h3>
-                        <p>RetroKnots is a comprehensive retrofit management platform designed to automate and streamline retrofit services from planning to execution. It simplifies survey checklists, retrofit coordination, and real-time documentation, enabling teams to manage retrofit projects efficiently. By centralizing workflows and ensuring accurate runtime records, RetroKnots improves compliance, and visibility.</p>
-                        <span class="product-card-cta">Visit Site <i class="bi bi-arrow-right"></i></span>
-                    </div>
-                </a>
-            </div>
-
-            <!-- Product 7 - MLR360 -->
-            <div class="col-lg-6 col-md-6" data-aos="fade-up" data-aos-delay="500">
-                <a href="https://www.mlr360.com/" target="_blank" rel="noopener noreferrer" class="product-card">
-                    <div class="product-card-bg" style="background-image: url('img/site-images/mlr.jpg');"></div>
-                    <div class="product-card-content">
-                        <h3>MLR360</h3>
-                        <p>MLR360 is an advanced medico-legal documentation platform that automates detailed medical reporting for road traffic and workplace injuries. It generates structured reports covering accident scenarios, injury details, clinical findings, and prognosis. These court-ready reports help doctors, legal professionals, and insurers clearly understand patient conditions with complete analysis and context.</p>
-                        <span class="product-card-cta">Visit Site <i class="bi bi-arrow-right"></i></span>
-                    </div>
-                </a>
-            </div><!-- End Product Item -->
+            @foreach (var item in Model.Items)
+            {
+                <div class="col-lg-6 col-md-6" data-aos="fade-up" data-aos-delay="100">
+                    <a href="@item.SitePath" target="_blank" rel="noopener noreferrer" class="product-card">
+                        <div class="product-card-bg" style="background-image: url('@item.ImagePath');"></div>
+                        <div class="product-card-content">
+                            <h3>@item.Title</h3>
+                            <p>@item.Description</p>
+                            <span class="product-card-cta">Visit Site <i class="bi bi-arrow-right"></i></span>
+                        </div>
+                    </a>
+                </div>
+            }
 
         </div>
 
