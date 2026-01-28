@@ -1,0 +1,60 @@
+@page "/products/{slug}"
+@model DevNetSystems.Pages.ProductDetailModel
+@{
+    ViewData["Title"] = Model.Product?.Title ?? "Product Details";
+    ViewData["PageName"] = "Products";
+    ViewData["PageTitle"] = Model.Product?.Title ?? "Product Details";
+    ViewData["PageDescription"] = "";
+    ViewData["ImagePath"] = Model.Product?.ImagePath ?? "img/site-images/products.jpeg";
+}
+
+<partial name="Shared/_PageHeaderPartial" />
+
+@if (Model.Product is not null)
+{
+    <section id="product-detail" class="product-detail section">
+        <div class="container" data-aos="fade-up">
+            <div class="row align-items-start gy-5">
+                <div class="col-lg-10 col-xl-9 mx-auto">
+                    <div class="product-detail-body">
+                        <p class="product-detail-lead">
+                            @Model.Product.Description
+                        </p>
+
+                        <div class="product-detail-sidebar mt-4">
+                            <h3 class="sidebar-title">Quick Actions</h3>
+                            <p class="sidebar-text">
+                                Explore this product in more depth or jump directly to the live site.
+                            </p>
+
+                            @if (!string.IsNullOrEmpty(Model.Product.SitePath))
+                            {
+                                <a href="@Model.Product.SitePath"
+                                   target="_blank"
+                                   rel="noopener noreferrer"
+                                   class="product-card-cta">
+                                    Visit Site <i class="bi bi-arrow-right"></i>
+                                </a>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+}
+else
+{
+    <section class="section">
+        <div class="container text-center" data-aos="fade-up">
+            <h2>Product not found</h2>
+            <p class="mb-4">
+                We couldn't find the product you were looking for. It may have been moved or renamed.
+            </p>
+            <a asp-page="/Products" class="btn btn-accent">
+                Back to Products
+            </a>
+        </div>
+    </section>
+}
+

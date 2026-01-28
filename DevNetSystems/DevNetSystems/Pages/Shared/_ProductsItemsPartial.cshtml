@@ -24,12 +24,12 @@
             @foreach (var item in Model.Items)
             {
                 <div class="col-lg-6 col-md-6" data-aos="fade-up" data-aos-delay="100">
-                    <a href="@item.SitePath" target="_blank" rel="noopener noreferrer" class="product-card">
+                    <a asp-page="/ProductDetail" asp-route-slug="@item.Slug" class="product-card">
                         <div class="product-card-bg" style="background-image: url('@item.ImagePath');"></div>
                         <div class="product-card-content">
                             <h3>@item.Title</h3>
                             <p>@item.Description</p>
-                            <span class="product-card-cta">Visit Site <i class="bi bi-arrow-right"></i></span>
+                            <span class="product-card-cta">See Details <i class="bi bi-arrow-right"></i></span>
                         </div>
                     </a>
                 </div>
