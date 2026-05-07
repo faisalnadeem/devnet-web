@@ -1,4 +1,4 @@
-﻿@page
+@page
 @model PrivacyModel
 @{
     ViewData["Title"] = "Privacy Policy";
@@ -6,8 +6,27 @@
     ViewData["PageTitle"] = "Safeguarding Your Data with Trust";
     ViewData["PageDescription"] = "Committed to Transparency & Trust";
     ViewData["ImagePath"] = "img/site-images/dev-ing.jpeg";
+    ViewData["ImageAlt"] = "DEVNET SYSTEMS commitment to data privacy and security";
+    ViewData["MetaTitle"] = "Privacy Policy — Your Data & Trust | DEVNET SYSTEMS";
+    ViewData["MetaDescription"] = "Read the DEVNET SYSTEMS Privacy Policy. Learn how we collect, use, store, and protect your personal information across our website and digital services.";
+    ViewData["OgImage"] = "/img/site-images/dev-ing.jpeg";
+    ViewData["LcpImage"] = "/img/site-images/dev-ing.jpeg";
 }
-<partial name="Shared/_PageHeaderPartial"/>
+
+@section HeadJsonLd {
+    <script type="application/ld+json">
+    {
+      "@@context": "https://schema.org",
+      "@@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.devnetsystems.com/" },
+        { "@@type": "ListItem", "position": 2, "name": "Privacy Policy", "item": "https://www.devnetsystems.com/privacy" }
+      ]
+    }
+    </script>
+}
+
+<partial name="Shared/_PageHeaderPartial" />
 <partial name="Shared/_InformationCollectPartial" />
 <partial name="Shared/_DataUsageSecurityPartial" />
 <partial name="Shared/_UserDataControlPartial" />

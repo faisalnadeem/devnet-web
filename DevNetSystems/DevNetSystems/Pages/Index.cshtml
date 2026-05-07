@@ -1,13 +1,48 @@
-﻿@page
+@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Home";
     ViewData["PageName"] = "Home";
+    ViewData["MetaTitle"] = "Custom Web, Mobile & Software Development | DEVNET SYSTEMS";
+    ViewData["MetaDescription"] = "Custom web, mobile & software development by DEVNET SYSTEMS — a UK-based IT solutions provider with 20+ years of expertise in DevOps, QA & cloud services.";
+    ViewData["MetaKeywords"] = "DEVNET SYSTEMS, IT solutions UK, custom web development, mobile app development, bespoke software, DevOps, full stack, software testing, cloud services London";
+    ViewData["OgImage"] = "/img/site-images/computer-laptop.jpeg";
+    ViewData["OgType"] = "website";
+    ViewData["BodyClass"] = "index-page";
+    ViewData["LcpImage"] = "/img/site-images/computer-laptop.jpeg";
+}
+
+@section HeadJsonLd {
+    @* Note: WebSite + Organization schemas are emitted sitewide in _Layout.
+       On the homepage we contribute a richer ProfessionalService node that
+       merges with the Organization graph via shared @@id. *@
+    <script type="application/ld+json">
+    {
+      "@@context": "https://schema.org",
+      "@@type": "ProfessionalService",
+      "@@id": "https://www.devnetsystems.com/#organization",
+      "name": "DEVNET SYSTEMS",
+      "url": "https://www.devnetsystems.com",
+      "image": "https://www.devnetsystems.com/img/site-images/logo-nobg.png",
+      "telephone": "+44 7864 356775",
+      "priceRange": "$$",
+      "address": {
+        "@@type": "PostalAddress",
+        "streetAddress": "182-184 Office 14497, High Street North",
+        "addressLocality": "London",
+        "addressRegion": "England",
+        "postalCode": "E6 2JA",
+        "addressCountry": "GB"
+      },
+      "areaServed": "Worldwide",
+      "knowsAbout": ["Web Development","Mobile App Development","Bespoke Software Development","DevOps","Cloud Solutions","Quality Assurance","UI/UX Design"]
+    }
+    </script>
 }
 
 <partial name="_HeroPartial" />
 <partial name="_WhoWeArePartial" />
-<partial name="_ServicesPartial"/>
+<partial name="_ServicesPartial" />
 <partial name="_OurJourneyPartial" />
 <partial name="_GetStartedPartial" />
 <partial name="_WhyChooseUsPartial" />

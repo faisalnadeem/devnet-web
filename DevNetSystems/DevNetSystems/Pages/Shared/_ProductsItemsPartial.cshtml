@@ -8,10 +8,10 @@
 }
 
 <!-- Products Section -->
-<section id="products" class="products section">
+<section id="products" class="products section" aria-labelledby="products-heading">
     <div class="container section-title" data-aos="fade-up">
         <span style="font-size: 14px; color: rgba(0, 0, 0, 0.6); text-transform: uppercase; letter-spacing: 1px; font-weight: 500; display: block; margin-bottom: 10px;">Our Products</span>
-        <h2>Website and App Products</h2>
+        <h2 id="products-heading">Website and App Products</h2>
         <p>
             We build software that solves real problems. From route planning and geo-enabled documentation to AI-powered lead engagement and business optimization, our products are designed to deliver value across industries.
         </p>
@@ -19,23 +19,23 @@
 
     <div class="container">
 
-        <div class="row gy-4">
+        <ul class="row gy-4 list-unstyled" style="padding-left:0;">
 
             @foreach (var item in Model.Items)
             {
-                <div class="col-lg-6 col-md-6" data-aos="fade-up" data-aos-delay="100">
-                    <a asp-page="/ProductDetail" asp-route-slug="@item.Slug" class="product-card">
-                        <div class="product-card-bg" style="background-image: url('@item.ImagePath');"></div>
+                <li class="col-lg-6 col-md-6" data-aos="fade-up" data-aos-delay="100">
+                    <a asp-page="/ProductDetail" asp-route-slug="@item.Slug" class="product-card" aria-label="View details for @item.Title">
+                        <div class="product-card-bg" style="background-image: url('/@item.ImagePath');" role="img" aria-label="@item.Title preview image"></div>
                         <div class="product-card-content">
                             <h3>@item.Title</h3>
                             <p>@item.Description</p>
-                            <span class="product-card-cta">See Details <i class="bi bi-arrow-right"></i></span>
+                            <span class="product-card-cta">See Details <i class="bi bi-arrow-right" aria-hidden="true"></i></span>
                         </div>
                     </a>
-                </div>
+                </li>
             }
 
-        </div>
+        </ul>
 
     </div>
 

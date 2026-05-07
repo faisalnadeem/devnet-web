@@ -6,7 +6,40 @@
     ViewData["PageTitle"] = "Our Products and Applications";
     ViewData["PageDescription"] = "Software Solutions Built for You";
     ViewData["ImagePath"] = "img/site-images/products.jpeg";
+    ViewData["ImageAlt"] = "DEVNET SYSTEMS portfolio of software products and applications";
+    ViewData["MetaTitle"] = "Our Software Products & Applications | DEVNET SYSTEMS";
+    ViewData["MetaDescription"] = "Discover DEVNET SYSTEMS' portfolio of intelligent products: RouteKnots, Optaxia, Aythen, PasLogic, Gripoints, RetroKnots, and MLR360.";
+    ViewData["OgImage"] = "/img/site-images/products.jpeg";
+    ViewData["LcpImage"] = "/img/site-images/products.jpeg";
 }
-<partial name="Shared/_PageHeaderPartial"/>
+
+@section HeadJsonLd {
+    <script type="application/ld+json">
+    {
+      "@@context": "https://schema.org",
+      "@@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.devnetsystems.com/" },
+        { "@@type": "ListItem", "position": 2, "name": "Products", "item": "https://www.devnetsystems.com/products" }
+      ]
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@@context": "https://schema.org",
+      "@@type": "ItemList",
+      "name": "DEVNET SYSTEMS Products",
+      "itemListElement": [
+        @{
+            var listItems = Model.Items
+                .Select((item, idx) => $"{{ \"@type\": \"ListItem\", \"position\": {idx + 1}, \"url\": \"https://www.devnetsystems.com/products/{item.Slug}\", \"name\": \"{System.Net.WebUtility.HtmlEncode(item.Title)}\" }}");
+        }
+        @Html.Raw(string.Join(",\n        ", listItems))
+      ]
+    }
+    </script>
+}
+
+<partial name="Shared/_PageHeaderPartial" />
 <!-- Products Section -->
-<partial name="Shared/_ProductsItemsPartial"/>
+<partial name="Shared/_ProductsItemsPartial" />

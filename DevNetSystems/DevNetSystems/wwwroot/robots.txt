@@ -1,0 +1,31 @@
+# robots.txt for DEVNET SYSTEMS — https://www.devnetsystems.com
+
+User-agent: *
+Allow: /
+
+# Block error and framework-internal paths
+Disallow: /Error
+Disallow: /Error/
+Disallow: /error
+Disallow: /lib/
+Disallow: /vendor/
+Disallow: /scss/
+
+# Block any query-string crawl waste
+Disallow: /*?*
+
+# Crawl delay (polite default)
+Crawl-delay: 1
+
+# Common bad bots
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+# Sitemap
+Sitemap: https://www.devnetsystems.com/sitemap.xml

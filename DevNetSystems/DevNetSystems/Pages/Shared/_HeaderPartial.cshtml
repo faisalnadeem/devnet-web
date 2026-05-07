@@ -1,23 +1,23 @@
-<header id="header" class="header d-flex align-items-center fixed-top">
+<header id="header" class="header d-flex align-items-center fixed-top" role="banner">
     <div class="container position-relative d-flex align-items-center justify-content-between">
 
-        <a href="/" class="logo d-flex align-items-center me-auto me-xl-0">
-            <!-- Uncomment the line below if you also wish to use an image logo -->
-            <!-- <img src="img/logo.png" alt=""> -->
-            <h1 class="sitename">DEVNET SYSTEMS</h1>
+        <a href="/" class="logo d-flex align-items-center me-auto me-xl-0" aria-label="DEVNET SYSTEMS — Home">
+            <span class="sitename" role="heading" aria-level="1">DEVNET SYSTEMS</span>
         </a>
 
-        <nav id="navmenu" class="navmenu">
+        <nav id="navmenu" class="navmenu" aria-label="Primary">
             <ul>
-                <li><a href="/" class='@(ViewBag.PageName == "Home" ? "active" :"")'>Home</a></li>
-                <li><a href="/Services" class='@(ViewBag.PageName == "Services" ? "active" : "")'>Services</a></li>
-                <li><a href="/Products" class='@(ViewBag.PageName == "Products" ? "active" : "")'>Products</a></li>
-                <li><a href="/About" class='@(ViewBag.PageName == "About" ? "active" : "")'>About</a></li>
-                @* <li><a href="#portfolio">Portfolio</a></li> *@
-                <li><a href="/Privacy" class='@(ViewBag.PageName == "Privacy" ? "active" : "")'>Privacy Policy</a></li>
-                <li><a href="/Contact" class='@(ViewBag.PageName == "Contact" ? "active" : "")'>Contact</a></li>
+                <li><a href="/" class='@(ViewBag.PageName == "Home" ? "active" :"")' aria-current="@(ViewBag.PageName == "Home" ? "page" : null)">Home</a></li>
+                <li><a href="/Services" class='@(ViewBag.PageName == "Services" ? "active" : "")' aria-current="@(ViewBag.PageName == "Services" ? "page" : null)">Services</a></li>
+                <li><a href="/Products" class='@(ViewBag.PageName == "Products" ? "active" : "")' aria-current="@(ViewBag.PageName == "Products" ? "page" : null)">Products</a></li>
+                <li><a href="/About" class='@(ViewBag.PageName == "About" ? "active" : "")' aria-current="@(ViewBag.PageName == "About" ? "page" : null)">About</a></li>
+                <li><a href="/Faq" class='@(ViewBag.PageName == "Faq" ? "active" : "")' aria-current="@(ViewBag.PageName == "Faq" ? "page" : null)">FAQ</a></li>
+                <li><a href="/Privacy" class='@(ViewBag.PageName == "Privacy" ? "active" : "")' aria-current="@(ViewBag.PageName == "Privacy" ? "page" : null)">Privacy Policy</a></li>
+                <li><a href="/Contact" class='@(ViewBag.PageName == "Contact" ? "active" : "")' aria-current="@(ViewBag.PageName == "Contact" ? "page" : null)">Contact</a></li>
             </ul>
-            <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+            <button type="button" class="mobile-nav-toggle d-xl-none btn p-0" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="navmenu" style="background:transparent;border:0;color:inherit;font-size:28px;line-height:1;">
+                <i class="bi bi-list" aria-hidden="true"></i>
+            </button>
         </nav>
 
     </div>

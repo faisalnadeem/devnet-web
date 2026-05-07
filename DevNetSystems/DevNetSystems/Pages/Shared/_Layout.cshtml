@@ -1,62 +1,144 @@
+@using Microsoft.Extensions.Options
+@using DevNetSystems.Services
+@inject IOptions<SiteSettings> SiteOptions
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <meta charset="utf-8">
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>Index - DEVNET SYSTEMS Bootstrap Template</title>
-    <meta name="description" content="">
-    <meta name="keywords" content="">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <!-- SEO Meta Tags (title, description, canonical, OG, Twitter) -->
+    <partial name="_SeoMetaPartial" />
 
     <!-- Favicons -->
-    <link href="~/img/favicon.png" rel="icon">
-    <link href="~/img/apple-touch-icon.png" rel="apple-touch-icon">
+    <link href="~/img/favicon.png" rel="icon" type="image/png" />
+    <link href="~/img/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <link href="~/img/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180" />
+
+    <!-- Preconnect to required origins -->
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin />
+    <link href="https://www.googletagmanager.com" rel="preconnect" crossorigin />
 
     <!-- Fonts -->
-    <link href="https://fonts.googleapis.com" rel="preconnect">
-    <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@@0,300;0,400;0,500;0,700;1,400&family=Poppins:ital,wght@@0,300;0,400;0,500;0,600;0,700&family=Raleway:ital,wght@@0,400;0,500;0,600;0,700;0,800&display=swap" rel="stylesheet" />
 
     <!-- Vendor CSS Files -->
-    <link href="~/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="~/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-    <link href="~/vendor/aos/aos.css" rel="stylesheet">
-    <link href="~/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
-    <link href="~/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+    <link href="~/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
+    <link href="~/vendor/aos/aos.css" rel="stylesheet" />
+    <link href="~/vendor/glightbox/css/glightbox.min.css" rel="stylesheet" />
+    <link href="~/vendor/swiper/swiper-bundle.min.css" rel="stylesheet" />
 
     <!-- Main CSS File -->
-    <link href="~/css/main.css" rel="stylesheet">
+    <link href="~/css/main.css" rel="stylesheet" />
+
+    <!-- Sitewide Organization + WebSite JSON-LD (linked via @@id so per-page schemas can reference the same entity) -->
+    <script type="application/ld+json">
+    {
+        "@@context": "https://schema.org",
+        "@@type": "Organization",
+        "@@id": "@(SiteOptions.Value.BaseUrl.TrimEnd('/'))/#organization",
+        "name": "@SiteOptions.Value.Name",
+        "legalName": "DEVNET SYSTEMS",
+        "url": "@SiteOptions.Value.BaseUrl",
+        "logo": "@(SiteOptions.Value.BaseUrl.TrimEnd('/'))/img/site-images/logo-nobg.png",
+        "image": "@(SiteOptions.Value.BaseUrl.TrimEnd('/'))/img/site-images/logo-nobg.png",
+        "description": "DEVNET SYSTEMS is a premier IT solutions provider with 20+ years of experience delivering web, mobile, and bespoke software development services.",
+        "email": "info@@devnetsystems.com",
+        "telephone": "+44 7864 356775",
+        "foundingDate": "2005",
+        "address": {
+            "@@type": "PostalAddress",
+            "streetAddress": "182-184 Office 14497, High Street North",
+            "addressLocality": "London",
+            "addressRegion": "England",
+            "postalCode": "E6 2JA",
+            "addressCountry": "GB"
+        },
+        "sameAs": [
+            "https://www.facebook.com/people/Dev-Net-Systems/61581967177051/",
+            "https://www.instagram.com/devnetsystems",
+            "https://www.linkedin.com/company/devnet-systems-uk"
+        ]
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+        "@@context": "https://schema.org",
+        "@@type": "WebSite",
+        "@@id": "@(SiteOptions.Value.BaseUrl.TrimEnd('/'))/#website",
+        "name": "@SiteOptions.Value.Name",
+        "url": "@SiteOptions.Value.BaseUrl",
+        "inLanguage": "en-GB",
+        "publisher": { "@@type": "Organization", "@@id": "@(SiteOptions.Value.BaseUrl.TrimEnd('/'))/#organization" },
+        "potentialAction": {
+            "@@type": "SearchAction",
+            "target": "@(SiteOptions.Value.BaseUrl.TrimEnd('/'))/?q={search_term_string}",
+            "query-input": "required name=search_term_string"
+        }
+    }
+    </script>
+
+    @await RenderSectionAsync("HeadJsonLd", required: false)
+    @await RenderSectionAsync("Head", required: false)
+
+    <!-- Google Consent Mode v2 (UK GDPR + PECR compliant). Default denied; cookie banner must call gtag('consent','update',{...}) once user grants consent. -->
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('consent', 'default', {
+            'ad_storage': 'denied',
+            'ad_user_data': 'denied',
+            'ad_personalization': 'denied',
+            'analytics_storage': 'denied',
+            'functionality_storage': 'granted',
+            'security_storage': 'granted',
+            'wait_for_update': 500
+        });
+    </script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-SYR63B085D"></script>
+    <script>
+        gtag('js', new Date());
+        gtag('config', 'G-SYR63B085D', { 'anonymize_ip': true });
+    </script>
 </head>
 
-<body class="index-page">
+<body class="@(ViewData["BodyClass"] as string ?? "index-page")">
+
+    <a class="visually-hidden-focusable" href="#main-content">Skip to main content</a>
 
     <partial name="_HeaderPartial" />
-    <main class="main">
-        
+
+    <main id="main-content" class="main">
+
         @RenderBody()
 
     </main>
 
-    <partial name="_FooterPartial"/>
+    <partial name="_FooterPartial" />
 
     <!-- Scroll Top -->
-    <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+    <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center" aria-label="Scroll to top of page"><i class="bi bi-arrow-up-short" aria-hidden="true"></i></a>
 
     <!-- Preloader -->
     <div id="preloader"></div>
 
     <!-- Vendor JS Files -->
-    <script src="~/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="~/vendor/php-email-form/validate.js"></script>
-    <script src="~/vendor/aos/aos.js"></script>
-    <script src="~/vendor/glightbox/js/glightbox.min.js"></script>
-    <script src="~/vendor/purecounter/purecounter_vanilla.js"></script>
-    <script src="~/vendor/imagesloaded/imagesloaded.pkgd.min.js"></script>
-    <script src="~/vendor/isotope-layout/isotope.pkgd.min.js"></script>
-    <script src="~/vendor/swiper/swiper-bundle.min.js"></script>
+    <script src="~/vendor/bootstrap/js/bootstrap.bundle.min.js" defer></script>
+    <script src="~/vendor/php-email-form/validate.js" defer></script>
+    <script src="~/vendor/aos/aos.js" defer></script>
+    <script src="~/vendor/glightbox/js/glightbox.min.js" defer></script>
+    <script src="~/vendor/purecounter/purecounter_vanilla.js" defer></script>
+    <script src="~/vendor/imagesloaded/imagesloaded.pkgd.min.js" defer></script>
+    <script src="~/vendor/isotope-layout/isotope.pkgd.min.js" defer></script>
+    <script src="~/vendor/swiper/swiper-bundle.min.js" defer></script>
 
     <!-- Main JS File -->
-    <script src="~/js/main.js"></script>
+    <script src="~/js/main.js" defer></script>
 
     @await RenderSectionAsync("Scripts", required: false)
 

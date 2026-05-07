@@ -1,14 +1,32 @@
-<!-- Hero Section -->
-<section id="page-header" class="page-header section dark-background">
+@{
+    var pageTitle = ViewBag.PageTitle as string ?? ViewData["Title"] as string ?? "";
+    var pageDescription = ViewBag.PageDescription as string ?? "";
+    var imagePath = ViewBag.ImagePath as string ?? "img/site-images/computer-laptop.jpeg";
+    var imageAlt = ViewBag.ImageAlt as string ?? pageTitle;
+    var pageName = ViewBag.PageName as string ?? "";
+}
 
-    <img src="~/@ViewBag.ImagePath" alt="" data-aos="fade-in">
+<!-- Page Header -->
+<section id="page-header" class="page-header section dark-background" aria-label="@pageTitle">
+
+    <img src="~/@imagePath" alt="@imageAlt" data-aos="fade-in" loading="eager" decoding="async" fetchpriority="high" />
 
     <div class="container d-flex flex-column align-items-center text-center">
-        @if (!string.IsNullOrWhiteSpace(ViewBag.PageDescription as string))
+        @if (!string.IsNullOrWhiteSpace(pageDescription))
         {
-            <p data-aos="fade-up" data-aos-delay="100" style="font-size: 16px; color: rgba(255, 255, 255, 0.9); margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px;">@ViewBag.PageDescription</p>
+            <p data-aos="fade-up" data-aos-delay="100" style="font-size: 16px; color: rgba(255, 255, 255, 0.9); margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px;">@pageDescription</p>
         }
-        <h2 data-aos="fade-up" data-aos-delay="200">@ViewBag.PageTitle</h2>
+        <h1 data-aos="fade-up" data-aos-delay="200" style="margin-bottom: 15px;">@pageTitle</h1>
+
+        @if (!string.IsNullOrWhiteSpace(pageName) && pageName != "Home")
+        {
+            <nav aria-label="Breadcrumb" class="mt-2">
+                <ol class="breadcrumb justify-content-center" style="background:transparent;margin-bottom:0;">
+                    <li class="breadcrumb-item"><a href="/" style="color:rgba(255,255,255,0.85);">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page" style="color:rgba(255,255,255,0.95);">@pageTitle</li>
+                </ol>
+            </nav>
+        }
     </div>
 
-</section><!-- /Hero Section -->
+</section><!-- /Page Header -->

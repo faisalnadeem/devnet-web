@@ -1,4 +1,4 @@
-﻿@page
+@page
 @model ServicesModel
 @{
     ViewData["Title"] = "Services";
@@ -6,7 +6,43 @@
     ViewData["PageTitle"] = "Building Success With IT Expertise";
     ViewData["PageDescription"] = "Innovative IT Solutions";
     ViewData["ImagePath"] = "img/site-images/dev-computer.jpeg";
+    ViewData["ImageAlt"] = "DEVNET SYSTEMS engineers delivering IT services";
+    ViewData["MetaTitle"] = "Web, Mobile & Software Dev Services | DEVNET SYSTEMS";
+    ViewData["MetaDescription"] = "Explore DEVNET SYSTEMS services: web development, mobile apps, bespoke software, full stack, QA & testing, DevOps, UI/UX design, maintenance & support.";
+    ViewData["OgImage"] = "/img/site-images/dev-computer.jpeg";
+    ViewData["LcpImage"] = "/img/site-images/dev-computer.jpeg";
 }
-<partial name="Shared/_PageHeaderPartial"/>
+
+@section HeadJsonLd {
+    <script type="application/ld+json">
+    {
+      "@@context": "https://schema.org",
+      "@@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.devnetsystems.com/" },
+        { "@@type": "ListItem", "position": 2, "name": "Services", "item": "https://www.devnetsystems.com/services" }
+      ]
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@@context": "https://schema.org",
+      "@@type": "ItemList",
+      "name": "DEVNET SYSTEMS Services",
+      "itemListElement": [
+        { "@@type": "Service", "position": 1, "name": "Web Development Services", "url": "https://www.devnetsystems.com/services#web-development", "provider": { "@@type": "Organization", "name": "DEVNET SYSTEMS" }, "areaServed": "Worldwide", "description": "Modern, responsive, and secure websites tailored to your brand and business objectives." },
+        { "@@type": "Service", "position": 2, "name": "Mobile Application Development", "url": "https://www.devnetsystems.com/services#mobile-app-development", "provider": { "@@type": "Organization", "name": "DEVNET SYSTEMS" }, "areaServed": "Worldwide", "description": "High-quality mobile applications for iOS and Android with rich functionality and intuitive UX." },
+        { "@@type": "Service", "position": 3, "name": "Bespoke Software Development", "url": "https://www.devnetsystems.com/services#bespoke-software", "provider": { "@@type": "Organization", "name": "DEVNET SYSTEMS" }, "areaServed": "Worldwide", "description": "Custom software solutions designed around your workflows and business strategy." },
+        { "@@type": "Service", "position": 4, "name": "Full Stack Development", "url": "https://www.devnetsystems.com/services#full-stack", "provider": { "@@type": "Organization", "name": "DEVNET SYSTEMS" }, "areaServed": "Worldwide", "description": "End-to-end full-stack engineering covering frontend, backend, and database systems." },
+        { "@@type": "Service", "position": 5, "name": "Quality Assurance & Testing", "url": "https://www.devnetsystems.com/services#qa", "provider": { "@@type": "Organization", "name": "DEVNET SYSTEMS" }, "areaServed": "Worldwide", "description": "Comprehensive testing services for reliable, secure, and high-performing software." },
+        { "@@type": "Service", "position": 6, "name": "Maintenance & Support", "url": "https://www.devnetsystems.com/services#maintenance", "provider": { "@@type": "Organization", "name": "DEVNET SYSTEMS" }, "areaServed": "Worldwide", "description": "Continuous maintenance and dedicated technical support to keep software running efficiently." },
+        { "@@type": "Service", "position": 7, "name": "UI/UX Design Services", "url": "https://www.devnetsystems.com/services#ui-ux", "provider": { "@@type": "Organization", "name": "DEVNET SYSTEMS" }, "areaServed": "Worldwide", "description": "User-centered designs combining aesthetics with functionality for seamless digital experiences." },
+        { "@@type": "Service", "position": 8, "name": "Cloud Solutions & DevOps", "url": "https://www.devnetsystems.com/services#cloud-devops", "provider": { "@@type": "Organization", "name": "DEVNET SYSTEMS" }, "areaServed": "Worldwide", "description": "Scalable cloud services and DevOps solutions for modern infrastructure and CI/CD." }
+      ]
+    }
+    </script>
+}
+
+<partial name="Shared/_PageHeaderPartial" />
 <!-- Services Section -->
-<partial name="Shared/_ServicesItemsPartial"/>
+<partial name="Shared/_ServicesItemsPartial" />

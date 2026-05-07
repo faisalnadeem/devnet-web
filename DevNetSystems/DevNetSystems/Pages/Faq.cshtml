@@ -1,11 +1,73 @@
-﻿@page
+@page
 @model FaqModel
 @{
+    ViewData["Title"] = "FAQ";
     ViewData["PageName"] = "Faq";
+    ViewData["PageTitle"] = "Frequently Asked Questions";
+    ViewData["PageDescription"] = "Answers to Common Questions";
+    ViewData["ImagePath"] = "img/site-images/faq2.jpg";
+    ViewData["ImageAlt"] = "DEVNET SYSTEMS frequently asked questions";
+    ViewData["MetaTitle"] = "FAQ — Common Questions Answered | DEVNET SYSTEMS";
+    ViewData["MetaDescription"] = "Find answers to common questions about DEVNET SYSTEMS' web, mobile, and software development services, project process, pricing, and support.";
+    ViewData["OgImage"] = "/img/site-images/faq2.jpg";
+    ViewData["LcpImage"] = "/img/site-images/faq2.jpg";
 }
 
+@section HeadJsonLd {
+    <script type="application/ld+json">
+    {
+      "@@context": "https://schema.org",
+      "@@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.devnetsystems.com/" },
+        { "@@type": "ListItem", "position": 2, "name": "FAQ", "item": "https://www.devnetsystems.com/faq" }
+      ]
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@@context": "https://schema.org",
+      "@@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@@type": "Question",
+          "name": "What services does DEVNET SYSTEMS offer?",
+          "acceptedAnswer": { "@@type": "Answer", "text": "We provide web development, mobile application development, bespoke software development, full stack engineering, QA & testing, UI/UX design, cloud solutions, and DevOps." }
+        },
+        {
+          "@@type": "Question",
+          "name": "How long has DEVNET SYSTEMS been in business?",
+          "acceptedAnswer": { "@@type": "Answer", "text": "DEVNET SYSTEMS was founded in 2005 and has over 20 years of experience delivering tailored IT solutions across multiple industries." }
+        },
+        {
+          "@@type": "Question",
+          "name": "Where is DEVNET SYSTEMS based?",
+          "acceptedAnswer": { "@@type": "Answer", "text": "Our office is at 182-184 Office 14497, High Street North, London, England, E6 2JA. We serve clients worldwide." }
+        },
+        {
+          "@@type": "Question",
+          "name": "What technologies do you work with?",
+          "acceptedAnswer": { "@@type": "Answer", "text": "We work across modern web stacks (React, Angular, .NET, Node.js), native and cross-platform mobile (iOS, Android, Flutter, React Native), cloud (AWS, Azure, GCP), and CI/CD/DevOps tooling." }
+        },
+        {
+          "@@type": "Question",
+          "name": "How do I get a quote for my project?",
+          "acceptedAnswer": { "@@type": "Answer", "text": "You can request a free consultation through our Contact page or email info@devnetsystems.com. We will discuss your goals and provide a detailed proposal and timeline." }
+        },
+        {
+          "@@type": "Question",
+          "name": "Do you provide ongoing maintenance and support?",
+          "acceptedAnswer": { "@@type": "Answer", "text": "Yes. We offer continuous maintenance, monitoring, security patching, and feature enhancements to keep your software running smoothly long after launch." }
+        }
+      ]
+    }
+    </script>
+}
+
+<partial name="Shared/_PageHeaderPartial" />
+
 <!-- Faq Section -->
-<section id="faq" class="faq section">
+<section id="faq" class="faq section" aria-labelledby="faq-title">
 
     <div class="container-fluid">
 
@@ -14,47 +76,74 @@
             <div class="col-lg-7 d-flex flex-column justify-content-center order-2 order-lg-1">
 
                 <div class="content px-xl-5" data-aos="fade-up" data-aos-delay="100">
-                    <h3><span>Frequently Asked </span><strong>Questions</strong></h3>
+                    <h2 id="faq-title"><span>Frequently Asked </span><strong>Questions</strong></h2>
                     <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Duis aute irure dolor in reprehenderit
+                        Below are answers to questions we hear most often. If you don't see what you're looking for, contact our team and we'll be happy to help.
                     </p>
                 </div>
 
                 <div class="faq-container px-xl-5" data-aos="fade-up" data-aos-delay="200">
 
                     <div class="faq-item faq-active">
-                        <i class="faq-icon bi bi-question-circle"></i>
-                        <h3>Non consectetur a erat nam at lectus urna duis?</h3>
+                        <i class="faq-icon bi bi-question-circle" aria-hidden="true"></i>
+                        <h3>What services does DEVNET SYSTEMS offer?</h3>
                         <div class="faq-content">
-                            <p>Feugiat pretium nibh ipsum consequat. Tempus iaculis urna id volutpat lacus laoreet non curabitur gravida. Venenatis lectus magna fringilla urna porttitor rhoncus dolor purus non.</p>
+                            <p>We provide web development, mobile application development, bespoke software, full stack engineering, QA & testing, UI/UX design, cloud solutions, and DevOps services tailored to your business goals.</p>
                         </div>
-                        <i class="faq-toggle bi bi-chevron-right"></i>
+                        <i class="faq-toggle bi bi-chevron-right" aria-hidden="true"></i>
                     </div><!-- End Faq item-->
 
                     <div class="faq-item">
-                        <i class="faq-icon bi bi-question-circle"></i>
-                        <h3>Feugiat scelerisque varius morbi enim nunc faucibus a pellentesque?</h3>
+                        <i class="faq-icon bi bi-question-circle" aria-hidden="true"></i>
+                        <h3>How long has DEVNET SYSTEMS been in business?</h3>
                         <div class="faq-content">
-                            <p>Dolor sit amet consectetur adipiscing elit pellentesque habitant morbi. Id interdum velit laoreet id donec ultrices. Fringilla phasellus faucibus scelerisque eleifend donec pretium. Est pellentesque elit ullamcorper dignissim. Mauris ultrices eros in cursus turpis massa tincidunt dui.</p>
+                            <p>DEVNET SYSTEMS was founded in 2005 and has over 20 years of experience delivering reliable, innovative IT solutions for clients across multiple industries.</p>
                         </div>
-                        <i class="faq-toggle bi bi-chevron-right"></i>
+                        <i class="faq-toggle bi bi-chevron-right" aria-hidden="true"></i>
                     </div><!-- End Faq item-->
 
                     <div class="faq-item">
-                        <i class="faq-icon bi bi-question-circle"></i>
-                        <h3>Dolor sit amet consectetur adipiscing elit pellentesque?</h3>
+                        <i class="faq-icon bi bi-question-circle" aria-hidden="true"></i>
+                        <h3>Where is DEVNET SYSTEMS based?</h3>
                         <div class="faq-content">
-                            <p>Eleifend mi in nulla posuere sollicitudin aliquam ultrices sagittis orci. Faucibus pulvinar elementum integer enim. Sem nulla pharetra diam sit amet nisl suscipit. Rutrum tellus pellentesque eu tincidunt. Lectus urna duis convallis convallis tellus. Urna molestie at elementum eu facilisis sed odio morbi quis</p>
+                            <p>Our office is at 182-184 Office 14497, High Street North, London, England, E6 2JA. We work with clients across the UK and worldwide.</p>
                         </div>
-                        <i class="faq-toggle bi bi-chevron-right"></i>
+                        <i class="faq-toggle bi bi-chevron-right" aria-hidden="true"></i>
+                    </div><!-- End Faq item-->
+
+                    <div class="faq-item">
+                        <i class="faq-icon bi bi-question-circle" aria-hidden="true"></i>
+                        <h3>What technologies do you work with?</h3>
+                        <div class="faq-content">
+                            <p>We work across modern web stacks (React, Angular, .NET, Node.js), native and cross-platform mobile (iOS, Android, Flutter, React Native), cloud (AWS, Azure, GCP), and CI/CD/DevOps tooling.</p>
+                        </div>
+                        <i class="faq-toggle bi bi-chevron-right" aria-hidden="true"></i>
+                    </div><!-- End Faq item-->
+
+                    <div class="faq-item">
+                        <i class="faq-icon bi bi-question-circle" aria-hidden="true"></i>
+                        <h3>How do I get a quote for my project?</h3>
+                        <div class="faq-content">
+                            <p>Visit the <a asp-page="/Contact">Contact</a> page or email <a href="mailto:info@devnetsystems.com">info@devnetsystems.com</a>. We'll book a free consultation, scope the work, and send a detailed proposal with timeline and pricing.</p>
+                        </div>
+                        <i class="faq-toggle bi bi-chevron-right" aria-hidden="true"></i>
+                    </div><!-- End Faq item-->
+
+                    <div class="faq-item">
+                        <i class="faq-icon bi bi-question-circle" aria-hidden="true"></i>
+                        <h3>Do you provide ongoing maintenance and support?</h3>
+                        <div class="faq-content">
+                            <p>Yes. We offer continuous maintenance, monitoring, security patching, and feature enhancements to keep your software running smoothly long after launch.</p>
+                        </div>
+                        <i class="faq-toggle bi bi-chevron-right" aria-hidden="true"></i>
                     </div><!-- End Faq item-->
 
                 </div>
 
             </div>
 
-            <div class="col-lg-5 order-1 order-lg-2">
-                <img src="img/faq.jpg" class="img-fluid" alt="" data-aos="zoom-in" data-aos-delay="100">
+            <div class="col-lg-5 order-1 order-lg-2 d-flex align-items-center">
+                <img src="~/img/site-images/faq2.jpg" class="img-fluid rounded" alt="DEVNET SYSTEMS team answering common client questions" data-aos="zoom-in" data-aos-delay="100" loading="lazy" decoding="async" />
             </div>
         </div>
 

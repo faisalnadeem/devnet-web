@@ -1,13 +1,41 @@
-﻿@page
+@page
 @model AboutModel
 @{
-    ViewData["Title"] = "About us";
+    ViewData["Title"] = "About Us";
     ViewData["PageName"] = "About";
     ViewData["PageTitle"] = "Empowering Your Digital Transformation Journey";
     ViewData["PageDescription"] = "Innovative IT Solutions Provider";
     ViewData["ImagePath"] = "img/site-images/contact.jpeg";
+    ViewData["ImageAlt"] = "DEVNET SYSTEMS team collaborating on IT solutions";
+    ViewData["MetaTitle"] = "About DEVNET SYSTEMS — 20+ Years of IT Excellence";
+    ViewData["MetaDescription"] = "DEVNET SYSTEMS is a London-based IT solutions provider empowering businesses for 20+ years with web, mobile & bespoke software development.";
+    ViewData["OgImage"] = "/img/site-images/contact.jpeg";
+    ViewData["LcpImage"] = "/img/site-images/contact.jpeg";
 }
-<partial name="Shared/_PageHeaderPartial"/>
+
+@section HeadJsonLd {
+    <script type="application/ld+json">
+    {
+      "@@context": "https://schema.org",
+      "@@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.devnetsystems.com/" },
+        { "@@type": "ListItem", "position": 2, "name": "About", "item": "https://www.devnetsystems.com/about" }
+      ]
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@@context": "https://schema.org",
+      "@@type": "AboutPage",
+      "name": "About DEVNET SYSTEMS",
+      "url": "https://www.devnetsystems.com/about",
+      "mainEntity": { "@@type": "Organization", "@@id": "https://www.devnetsystems.com/#organization" }
+    }
+    </script>
+}
+
+<partial name="Shared/_PageHeaderPartial" />
 <partial name="Shared/_WhoWeAreAboutPartial" />
 <partial name="Shared/_CommitmentPrinciplesPartial" />
 <partial name="Shared/_FaqAboutPartial" />

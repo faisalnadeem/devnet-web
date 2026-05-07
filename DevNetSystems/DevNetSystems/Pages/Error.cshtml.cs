@@ -12,6 +12,24 @@ namespace DevNetSystems.Pages
 
         public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
 
+        public int ErrorStatusCode { get; set; } = 500;
+
+        public string Heading => ErrorStatusCode switch
+        {
+            404 => "Page not found",
+            403 => "Access forbidden",
+            410 => "This page is gone",
+            _ => "Something went wrong"
+        };
+
+        public string SubHeading => ErrorStatusCode switch
+        {
+            404 => "We couldn't find the page you were looking for. It may have moved or no longer exists.",
+            403 => "You don't have permission to view this page.",
+            410 => "This resource has been permanently removed.",
+            _ => "An error occurred while processing your request. Our team has been notified."
+        };
+
         private readonly ILogger<ErrorModel> _logger;
 
         public ErrorModel(ILogger<ErrorModel> logger)
@@ -19,10 +37,14 @@ namespace DevNetSystems.Pages
             _logger = logger;
         }
 
-        public void OnGet()
+        public void OnGet(int? code = null)
         {
             RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
+            if (code.HasValue && code.Value >= 400 && code.Value < 600)
+            {
+                ErrorStatusCode = code.Value;
+                Response.StatusCode = code.Value;
+            }
         }
     }
-
 }

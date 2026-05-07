@@ -1,31 +1,43 @@
-﻿<footer id="footer" class="footer dark-background">
+<footer id="footer" class="footer dark-background" role="contentinfo">
     <div class="container">
 
-        <h3 class="sitename">DEVNET SYSTEMS</h3>
+        <p class="sitename mb-3" style="font-size:24px;font-weight:700;letter-spacing:1px;">DEVNET SYSTEMS</p>
 
         <!-- Connect With Us Section -->
         <div class="connect-with-us text-center mb-3">
-            <h5>Connect with us!</h5>
-            <p><strong>Address:</strong> 182-184 Office 14497, High Street North, London, England, E6 2JA</p>
-            <p><strong>Email:</strong> <a href="mailto:info@devnetsystems.com">info@devnetsystems.com</a></p>
+            <h2 style="font-size:20px;">Connect with us</h2>
+            <p><strong>Address:</strong> <span itemprop="address">182-184 Office 14497, High Street North, London, England, E6 2JA</span></p>
+            <p><strong>Email:</strong> <a href="mailto:info@devnetsystems.com" rel="noopener">info@devnetsystems.com</a></p>
+            <p><strong>Phone:</strong> <a href="tel:+447864356775" rel="noopener">+44 7864 356775</a></p>
         </div>
+
+        <!-- Footer Nav -->
+        <nav class="footer-nav d-flex flex-wrap justify-content-center mb-3" aria-label="Footer" style="gap:18px;">
+            <a href="/">Home</a>
+            <a href="/Services">Services</a>
+            <a href="/Products">Products</a>
+            <a href="/About">About</a>
+            <a href="/Faq">FAQ</a>
+            <a href="/Privacy">Privacy Policy</a>
+            <a href="/Contact">Contact</a>
+        </nav>
 
         <!-- Social Links -->
         <div class="social-links d-flex justify-content-center mb-3">
-            <a href="https://www.facebook.com/people/Dev-Net-Systems/61581967177051/" target="_blank">
-                <i class="bi bi-facebook"></i>
+            <a href="https://www.facebook.com/people/Dev-Net-Systems/61581967177051/" target="_blank" rel="noopener noreferrer" aria-label="DEVNET SYSTEMS on Facebook">
+                <i class="bi bi-facebook" aria-hidden="true"></i>
             </a>
-            <a href="https://www.instagram.com/devnetsystems" target="_blank">
-                <i class="bi bi-instagram"></i>
+            <a href="https://www.instagram.com/devnetsystems" target="_blank" rel="noopener noreferrer" aria-label="DEVNET SYSTEMS on Instagram">
+                <i class="bi bi-instagram" aria-hidden="true"></i>
             </a>
-            <a href="https://www.linkedin.com/company/devnet-systems-uk" target="_blank">
-                <i class="bi bi-linkedin"></i>
+            <a href="https://www.linkedin.com/company/devnet-systems-uk" target="_blank" rel="noopener noreferrer" aria-label="DEVNET SYSTEMS on LinkedIn">
+                <i class="bi bi-linkedin" aria-hidden="true"></i>
             </a>
         </div>
 
         <div class="container">
             <div class="copyright">
-                © <strong class="sitename">DEVNET SYSTEMS</strong> — All Rights Reserved
+                © @DateTime.UtcNow.Year <strong class="sitename">DEVNET SYSTEMS</strong> — All Rights Reserved
             </div>
         </div>
 

@@ -1,0 +1,97 @@
+@using Microsoft.Extensions.Options
+@using DevNetSystems.Services
+@inject IOptions<SiteSettings> SiteOptions
+@{
+    var site = SiteOptions.Value;
+    var baseUrl = (site.BaseUrl ?? "https://www.devnetsystems.com").TrimEnd('/');
+    var siteName = site.Name ?? "DEVNET SYSTEMS";
+
+    string path = Context.Request.Path.HasValue ? Context.Request.Path.Value! : "/";
+    if (path.Length > 1 && path.EndsWith("/")) path = path.TrimEnd('/');
+    // Normalize canonical to lowercase so /Services and /services collapse to one URL
+    path = path.ToLowerInvariant();
+    var canonical = baseUrl + (path == "" ? "/" : path);
+
+    var title = ViewData["MetaTitle"] as string
+                ?? ViewData["Title"] as string
+                ?? "Custom IT Solutions, Web & Mobile Development";
+    var fullTitle = title.Contains(siteName, StringComparison.OrdinalIgnoreCase)
+        ? title
+        : $"{title} | {siteName}";
+
+    var description = ViewData["MetaDescription"] as string
+        ?? "DEVNET SYSTEMS delivers tailored web, mobile, and software development services with 20+ years of expertise. Innovative IT solutions for every industry.";
+
+    var ogImagePath = ViewData["OgImage"] as string ?? site.DefaultOgImage ?? "/img/site-images/computer-laptop.jpeg";
+    if (!ogImagePath.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+    {
+        if (!ogImagePath.StartsWith("/")) ogImagePath = "/" + ogImagePath;
+        ogImagePath = baseUrl + ogImagePath;
+    }
+    var ogImageType = ogImagePath.EndsWith(".png", StringComparison.OrdinalIgnoreCase)
+        ? "image/png"
+        : (ogImagePath.EndsWith(".webp", StringComparison.OrdinalIgnoreCase) ? "image/webp" : "image/jpeg");
+
+    var ogType = ViewData["OgType"] as string ?? "website";
+    var robots = ViewData["Robots"] as string ?? "index, follow, max-image-preview:large";
+    var keywords = ViewData["MetaKeywords"] as string ?? "IT solutions, web development, mobile app development, software development, DevOps, UK IT company, custom software, DEVNET SYSTEMS";
+
+    // LCP image preload — page-specific. Falls back to OG image if not specified.
+    var lcpImage = ViewData["LcpImage"] as string;
+    if (!string.IsNullOrWhiteSpace(lcpImage) && !lcpImage.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+    {
+        if (!lcpImage.StartsWith("/")) lcpImage = "/" + lcpImage;
+    }
+    var lcpImageType = string.IsNullOrEmpty(lcpImage)
+        ? null
+        : (lcpImage.EndsWith(".png", StringComparison.OrdinalIgnoreCase)
+            ? "image/png"
+            : (lcpImage.EndsWith(".webp", StringComparison.OrdinalIgnoreCase) ? "image/webp" : "image/jpeg"));
+}
+<title>@fullTitle</title>
+<meta name="description" content="@description" />
+<meta name="keywords" content="@keywords" />
+<meta name="author" content="@siteName" />
+<meta name="robots" content="@robots" />
+<meta name="theme-color" content="#009961" />
+<meta name="format-detection" content="telephone=no" />
+
+@* Search Console / Bing verification — replace placeholder tokens after verification *@
+@if (!string.IsNullOrWhiteSpace(site.GoogleSiteVerification))
+{
+    <meta name="google-site-verification" content="@site.GoogleSiteVerification" />
+}
+@if (!string.IsNullOrWhiteSpace(site.BingSiteVerification))
+{
+    <meta name="msvalidate.01" content="@site.BingSiteVerification" />
+}
+
+<link rel="canonical" href="@canonical" />
+
+@* Preload the LCP image for the current page (biggest CWV win) *@
+@if (!string.IsNullOrWhiteSpace(lcpImage))
+{
+    <link rel="preload" as="image" href="@lcpImage" type="@lcpImageType" fetchpriority="high" />
+}
+
+<meta property="og:type" content="@ogType" />
+<meta property="og:site_name" content="@siteName" />
+<meta property="og:locale" content="@site.Locale" />
+<meta property="og:title" content="@fullTitle" />
+<meta property="og:description" content="@description" />
+<meta property="og:url" content="@canonical" />
+<meta property="og:image" content="@ogImagePath" />
+<meta property="og:image:secure_url" content="@ogImagePath" />
+<meta property="og:image:type" content="@ogImageType" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="@title" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="@fullTitle" />
+<meta name="twitter:description" content="@description" />
+<meta name="twitter:image" content="@ogImagePath" />
+@if (!string.IsNullOrWhiteSpace(site.TwitterHandle))
+{
+    <meta name="twitter:site" content="@site.TwitterHandle" />
+}
