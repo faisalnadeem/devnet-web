@@ -110,21 +110,31 @@
     @await RenderSectionAsync("HeadJsonLd", required: false)
     @await RenderSectionAsync("Head", required: false)
 
-    <!-- Google Consent Mode v2.
-         analytics_storage is GRANTED so GA4 can collect data immediately (no cookie banner is in place yet).
-         Ads-related signals stay denied because we don't run ads — keep these denied until/unless that changes.
-         When a cookie banner is added, call gtag('consent','update',{...}) on user choice. -->
+    <!-- Google Consent Mode v2 — UK GDPR + PECR compliant.
+         All advertising/analytics signals default to 'denied'. The cookie consent banner (rendered
+         from _CookieConsentPartial near the bottom of <body>) calls gtag('consent','update',{...})
+         when the visitor chooses Accept All or Reject All, and persists that choice in the
+         devnet_cookie_consent cookie (365 days).
+
+         For RETURNING visitors the script below reads that cookie BEFORE the gtag default call so
+         GA4's first hit on the page already has the correct consent state — no flash of denied,
+         no missed page_view. -->
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag() { dataLayer.push(arguments); }
-        gtag('consent', 'default', {
-            'ad_storage': 'denied',
-            'ad_user_data': 'denied',
-            'ad_personalization': 'denied',
-            'analytics_storage': 'granted',
-            'functionality_storage': 'granted',
-            'security_storage': 'granted'
-        });
+        (function () {
+            var match = document.cookie.match(/(?:^|;\s*)devnet_cookie_consent=([^;]+)/);
+            var stored = match ? decodeURIComponent(match[1]) : null;
+            var accepted = stored === 'accepted';
+            gtag('consent', 'default', {
+                'ad_storage':            accepted ? 'granted' : 'denied',
+                'ad_user_data':          accepted ? 'granted' : 'denied',
+                'ad_personalization':    accepted ? 'granted' : 'denied',
+                'analytics_storage':     accepted ? 'granted' : 'denied',
+                'functionality_storage': 'granted',
+                'security_storage':      'granted'
+            });
+        })();
     </script>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-SYR63B085D"></script>
@@ -153,6 +163,9 @@
 
     <!-- Preloader -->
     <div id="preloader"></div>
+
+    <!-- Cookie consent banner (UK GDPR + PECR) — controls Consent Mode v2 state. -->
+    <partial name="_CookieConsentPartial" />
 
     <!-- Vendor JS Files (deferred + cache-busted via asp-append-version so we can serve them with a 1-year immutable cache) -->
     <script src="~/vendor/bootstrap/js/bootstrap.bundle.min.js" defer asp-append-version="true"></script>

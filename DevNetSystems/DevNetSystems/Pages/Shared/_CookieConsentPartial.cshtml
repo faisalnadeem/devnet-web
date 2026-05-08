@@ -1,0 +1,280 @@
+@*
+    Cookie consent banner — UK GDPR + PECR compliant.
+
+    Renders hidden by default; the inline script at the bottom shows it only when no
+    devnet_cookie_consent cookie is present, and wires Accept/Reject to gtag('consent','update',...).
+
+    Defaults are applied earlier in <head> by the consent block in _Layout.cshtml, which reads
+    the same cookie. So returning visitors get the right state on the first paint with no flash
+    of banner.
+*@
+<aside id="devnet-cookie-banner"
+       class="devnet-cookie-banner"
+       role="dialog"
+       aria-modal="false"
+       aria-live="polite"
+       aria-labelledby="devnet-cookie-banner-title"
+       aria-describedby="devnet-cookie-banner-desc"
+       hidden>
+    <div class="devnet-cookie-banner__inner">
+        <div class="devnet-cookie-banner__copy">
+            <p id="devnet-cookie-banner-title" class="devnet-cookie-banner__title">
+                <strong>DEVNET SYSTEMS</strong> uses cookies
+            </p>
+            <p id="devnet-cookie-banner-desc" class="devnet-cookie-banner__desc">
+                We use cookies and similar technologies to understand how visitors use our site so we can improve it. Analytics cookies are only set if you accept.
+                See our <a href="/privacy" class="devnet-cookie-banner__link">Privacy Policy</a> for details.
+            </p>
+        </div>
+        <div class="devnet-cookie-banner__actions" role="group" aria-label="Cookie consent choices">
+            <button type="button"
+                    class="devnet-cookie-banner__btn devnet-cookie-banner__btn--secondary"
+                    data-devnet-consent="reject">
+                Reject All
+            </button>
+            <button type="button"
+                    class="devnet-cookie-banner__btn devnet-cookie-banner__btn--primary"
+                    data-devnet-consent="accept">
+                Accept All
+            </button>
+        </div>
+    </div>
+</aside>
+
+<style>
+    /* Self-contained styling — pulls the site's accent + heading colors via CSS variables already
+       defined in main.css. No dependency on Bootstrap classes (banner stays consistent even if
+       vendor CSS hasn't finished loading yet). */
+    .devnet-cookie-banner {
+        position: fixed;
+        left: 16px;
+        right: 16px;
+        bottom: 16px;
+        z-index: 9999;
+        max-width: 1100px;
+        margin: 0 auto;
+        background: #ffffff;
+        color: #282828;
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        border-radius: 12px;
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18), 0 2px 6px rgba(0, 0, 0, 0.06);
+        padding: 18px 22px;
+        font-family: "Roboto", system-ui, -apple-system, "Segoe UI", sans-serif;
+        animation: devnet-cookie-banner-slide-in 220ms ease-out both;
+    }
+    @@keyframes devnet-cookie-banner-slide-in {
+        from { transform: translateY(20px); opacity: 0; }
+        to   { transform: translateY(0);    opacity: 1; }
+    }
+    .devnet-cookie-banner[hidden] { display: none !important; }
+
+    .devnet-cookie-banner__inner {
+        display: flex;
+        gap: 20px;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+    .devnet-cookie-banner__copy {
+        flex: 1 1 320px;
+        min-width: 0;
+    }
+    .devnet-cookie-banner__title {
+        margin: 0 0 4px;
+        font-size: 15px;
+        font-weight: 600;
+        color: #282828;
+        font-family: "Raleway", "Roboto", sans-serif;
+        letter-spacing: 0.2px;
+    }
+    .devnet-cookie-banner__title strong { color: #009961; font-weight: 700; }
+
+    .devnet-cookie-banner__desc {
+        margin: 0;
+        font-size: 14px;
+        line-height: 1.5;
+        color: #444444;
+    }
+    .devnet-cookie-banner__link {
+        color: #009961;
+        text-decoration: underline;
+        text-underline-offset: 2px;
+        font-weight: 500;
+    }
+    .devnet-cookie-banner__link:hover,
+    .devnet-cookie-banner__link:focus {
+        color: #007a4e;
+        text-decoration: none;
+    }
+
+    .devnet-cookie-banner__actions {
+        display: flex;
+        gap: 10px;
+        flex: 0 0 auto;
+        flex-wrap: wrap;
+    }
+    .devnet-cookie-banner__btn {
+        appearance: none;
+        border: 1px solid transparent;
+        border-radius: 50px;
+        font-family: inherit;
+        font-size: 14px;
+        font-weight: 500;
+        letter-spacing: 0.5px;
+        padding: 10px 22px;
+        cursor: pointer;
+        transition: background-color 180ms ease, color 180ms ease, border-color 180ms ease, transform 100ms ease;
+        white-space: nowrap;
+    }
+    .devnet-cookie-banner__btn:focus-visible {
+        outline: 2px solid #009961;
+        outline-offset: 2px;
+    }
+    .devnet-cookie-banner__btn:active { transform: translateY(1px); }
+
+    .devnet-cookie-banner__btn--primary {
+        background: #009961;
+        color: #ffffff;
+        border-color: #009961;
+    }
+    .devnet-cookie-banner__btn--primary:hover {
+        background: #007a4e;
+        border-color: #007a4e;
+    }
+    .devnet-cookie-banner__btn--secondary {
+        background: transparent;
+        color: #282828;
+        border-color: rgba(0, 0, 0, 0.18);
+    }
+    .devnet-cookie-banner__btn--secondary:hover {
+        background: #f3f3f3;
+        border-color: rgba(0, 0, 0, 0.28);
+    }
+
+    /* Mobile: stack copy and actions, push to full width buttons */
+    @@media (max-width: 640px) {
+        .devnet-cookie-banner {
+            left: 12px;
+            right: 12px;
+            bottom: 12px;
+            padding: 16px;
+            border-radius: 10px;
+        }
+        .devnet-cookie-banner__inner {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 14px;
+        }
+        .devnet-cookie-banner__actions {
+            flex-direction: row-reverse; /* Accept first on mobile (most prominent) */
+            justify-content: stretch;
+        }
+        .devnet-cookie-banner__btn {
+            flex: 1 1 0;
+            padding: 12px 16px;
+            font-size: 14px;
+        }
+    }
+
+    /* Match dark sections of the site if a page ever embeds the banner over dark background */
+    @@media (prefers-color-scheme: dark) {
+        /* Site itself isn't dark-mode-aware, so keep light card for consistency. */
+    }
+</style>
+
+<script>
+    (function () {
+        // Banner controller. Defaults were already applied by the inline consent block in <head>
+        // (which read the same cookie), so we just need to (a) decide whether to show the banner,
+        // and (b) wire up Accept/Reject to update consent + persist the choice.
+        'use strict';
+
+        var COOKIE_NAME = 'devnet_cookie_consent';
+        var COOKIE_MAX_AGE_DAYS = 365;
+
+        function readConsentCookie() {
+            var match = document.cookie.match(/(?:^|;\s*)devnet_cookie_consent=([^;]+)/);
+            return match ? decodeURIComponent(match[1]) : null;
+        }
+
+        function writeConsentCookie(value) {
+            var maxAge = COOKIE_MAX_AGE_DAYS * 24 * 60 * 60;
+            // SameSite=Lax keeps the cookie on top-level GET navigations (so it travels with the
+            // user across pages) but blocks it on cross-site iframes. Secure is omitted in dev
+            // (HTTP) and added automatically by the browser on HTTPS pages via the Set-Cookie
+            // semantics; doing it here would break local dev.
+            var secureFlag = location.protocol === 'https:' ? '; Secure' : '';
+            document.cookie = COOKIE_NAME + '=' + encodeURIComponent(value)
+                + '; Max-Age=' + maxAge
+                + '; Path=/'
+                + '; SameSite=Lax'
+                + secureFlag;
+        }
+
+        function ensureGtag() {
+            // gtag may race with the deferred GA tag — define a safe fallback that queues calls
+            // until the real gtag is available. The Consent Mode v2 block in <head> already
+            // defined a real gtag, but this is a defensive belt-and-braces.
+            window.dataLayer = window.dataLayer || [];
+            if (typeof window.gtag !== 'function') {
+                window.gtag = function () { window.dataLayer.push(arguments); };
+            }
+            return window.gtag;
+        }
+
+        function applyConsent(state) {
+            var gtag = ensureGtag();
+            if (state === 'accepted') {
+                gtag('consent', 'update', {
+                    'ad_storage': 'granted',
+                    'ad_user_data': 'granted',
+                    'ad_personalization': 'granted',
+                    'analytics_storage': 'granted'
+                });
+                // Nudge GA4 to send a page_view immediately on first acceptance — without this
+                // the very first session is missed because the initial config call ran with
+                // analytics_storage=denied.
+                try { gtag('event', 'consent_granted', { 'event_category': 'consent' }); } catch (e) {}
+            } else {
+                gtag('consent', 'update', {
+                    'ad_storage': 'denied',
+                    'ad_user_data': 'denied',
+                    'ad_personalization': 'denied',
+                    'analytics_storage': 'denied'
+                });
+            }
+        }
+
+        function hideBanner(banner) {
+            banner.setAttribute('hidden', '');
+        }
+
+        function init() {
+            var banner = document.getElementById('devnet-cookie-banner');
+            if (!banner) return;
+
+            var existing = readConsentCookie();
+            if (existing === 'accepted' || existing === 'rejected') {
+                // Decision already made; banner stays hidden. Defaults were already set in <head>.
+                return;
+            }
+
+            banner.removeAttribute('hidden');
+
+            banner.addEventListener('click', function (event) {
+                var btn = event.target.closest('[data-devnet-consent]');
+                if (!btn) return;
+                var choice = btn.getAttribute('data-devnet-consent');
+                var state = choice === 'accept' ? 'accepted' : 'rejected';
+                writeConsentCookie(state);
+                applyConsent(state);
+                hideBanner(banner);
+            });
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+    })();
+</script>
