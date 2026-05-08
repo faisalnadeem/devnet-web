@@ -2,15 +2,24 @@
 @using DevNetSystems.Services
 @inject IOptions<SiteSettings> SiteOptions
 @{
-    var site = SiteOptions.Value;
+    var site = SiteOptions.Value ?? new SiteSettings();
     var baseUrl = (site.BaseUrl ?? "https://www.devnetsystems.com").TrimEnd('/');
     var siteName = site.Name ?? "DEVNET SYSTEMS";
 
     string path = Context.Request.Path.HasValue ? Context.Request.Path.Value! : "/";
     if (path.Length > 1 && path.EndsWith("/")) path = path.TrimEnd('/');
-    // Normalize canonical to lowercase so /Services and /services collapse to one URL
+    // Normalize canonical to lowercase so /Services and /services collapse to one URL.
     path = path.ToLowerInvariant();
     var canonical = baseUrl + (path == "" ? "/" : path);
+
+    // Suppress canonical and og:url on pages that should never be indexed (Error, Sitemap re-execution
+    // targets, status-code re-executes). These are signalled either by an explicit ViewData["NoCanonical"]
+    // = true override, by the path matching /error*, or by a non-200 response status. Without this,
+    // Google was seeing rel=canonical pointing to /error/404 etc. on accidental re-execution paths.
+    var explicitlySuppressed = ViewData["NoCanonical"] is bool b && b;
+    var pathSuppresses = path.StartsWith("/error", StringComparison.OrdinalIgnoreCase)
+                         || path.Equals("/sitemap.xml", StringComparison.OrdinalIgnoreCase);
+    var suppressCanonical = explicitlySuppressed || pathSuppresses;
 
     var title = ViewData["MetaTitle"] as string
                 ?? ViewData["Title"] as string
@@ -66,7 +75,10 @@
     <meta name="msvalidate.01" content="@site.BingSiteVerification" />
 }
 
-<link rel="canonical" href="@canonical" />
+@if (!suppressCanonical)
+{
+    <link rel="canonical" href="@canonical" />
+}
 
 @* Preload the LCP image for the current page (biggest CWV win) *@
 @if (!string.IsNullOrWhiteSpace(lcpImage))
@@ -79,7 +91,10 @@
 <meta property="og:locale" content="@site.Locale" />
 <meta property="og:title" content="@fullTitle" />
 <meta property="og:description" content="@description" />
-<meta property="og:url" content="@canonical" />
+@if (!suppressCanonical)
+{
+    <meta property="og:url" content="@canonical" />
+}
 <meta property="og:image" content="@ogImagePath" />
 <meta property="og:image:secure_url" content="@ogImagePath" />
 <meta property="og:image:type" content="@ogImageType" />

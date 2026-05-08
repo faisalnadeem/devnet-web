@@ -6,6 +6,8 @@
     ViewData["MetaDescription"] = Model.SubHeading;
     ViewData["Robots"] = "noindex, follow";
     ViewData["PageName"] = "";
+    // Don't emit a canonical pointing at /error/{code} — Google would treat it as a real URL.
+    ViewData["NoCanonical"] = true;
 }
 
 <section class="section" style="padding: 100px 0;">
@@ -23,7 +25,7 @@
 
         <p class="mt-4">
             <a href="/" class="btn btn-accent">Return to Homepage</a>
-            <a asp-page="/Contact" class="btn btn-outline-secondary ms-2">Contact Support</a>
+            <a href="/contact" class="btn btn-outline-secondary ms-2">Contact Support</a>
         </p>
 
         @if (Model.ErrorStatusCode == 404)
@@ -31,13 +33,13 @@
             <div class="mt-5">
                 <p class="text-muted">You might be looking for:</p>
                 <ul class="list-inline">
-                    <li class="list-inline-item"><a asp-page="/Services">Services</a></li>
+                    <li class="list-inline-item"><a href="/services">Services</a></li>
                     <li class="list-inline-item">·</li>
-                    <li class="list-inline-item"><a asp-page="/Products">Products</a></li>
+                    <li class="list-inline-item"><a href="/products">Products</a></li>
                     <li class="list-inline-item">·</li>
-                    <li class="list-inline-item"><a asp-page="/About">About</a></li>
+                    <li class="list-inline-item"><a href="/about">About</a></li>
                     <li class="list-inline-item">·</li>
-                    <li class="list-inline-item"><a asp-page="/Faq">FAQ</a></li>
+                    <li class="list-inline-item"><a href="/faq">FAQ</a></li>
                 </ul>
             </div>
         }

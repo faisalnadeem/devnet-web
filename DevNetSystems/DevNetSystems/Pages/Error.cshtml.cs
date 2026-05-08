@@ -45,6 +45,13 @@ namespace DevNetSystems.Pages
                 ErrorStatusCode = code.Value;
                 Response.StatusCode = code.Value;
             }
+            // Belt-and-braces: send noindex via HTTP header too. The meta-robots tag covers
+            // crawlers that render HTML; this covers anything that only inspects headers and
+            // any accidental direct hit on /error or /error/{code}.
+            if (!Response.Headers.ContainsKey("X-Robots-Tag"))
+            {
+                Response.Headers["X-Robots-Tag"] = "noindex, nofollow";
+            }
         }
     }
 }

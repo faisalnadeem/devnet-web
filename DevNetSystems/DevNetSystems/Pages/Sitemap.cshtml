@@ -3,6 +3,8 @@
 @{
     Layout = null;
     Response.ContentType = "application/xml; charset=utf-8";
+    // Sitemaps are content-discovery files, never search results.
+    if (!Response.Headers.ContainsKey("X-Robots-Tag")) { Response.Headers["X-Robots-Tag"] = "noindex"; }
 }<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">

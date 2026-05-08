@@ -1,6 +1,13 @@
 @using Microsoft.Extensions.Options
 @using DevNetSystems.Services
 @inject IOptions<SiteSettings> SiteOptions
+@{
+    // Centralized null-safe accessors. If appsettings.json is misconfigured in any environment,
+    // these prevent NullReferenceException from bubbling up as a 500 — which is what was producing
+    // the "Server error (5xx)" indexing flag in Search Console.
+    var siteBaseUrl = (SiteOptions.Value?.BaseUrl ?? "https://www.devnetsystems.com").TrimEnd('/');
+    var siteDisplayName = SiteOptions.Value?.Name ?? "DEVNET SYSTEMS";
+}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -58,12 +65,12 @@
     {
         "@@context": "https://schema.org",
         "@@type": "Organization",
-        "@@id": "@(SiteOptions.Value.BaseUrl.TrimEnd('/'))/#organization",
-        "name": "@SiteOptions.Value.Name",
+        "@@id": "@siteBaseUrl/#organization",
+        "name": "@siteDisplayName",
         "legalName": "DEVNET SYSTEMS",
-        "url": "@SiteOptions.Value.BaseUrl",
-        "logo": "@(SiteOptions.Value.BaseUrl.TrimEnd('/'))/img/site-images/logo-nobg.png",
-        "image": "@(SiteOptions.Value.BaseUrl.TrimEnd('/'))/img/site-images/logo-nobg.png",
+        "url": "@siteBaseUrl",
+        "logo": "@siteBaseUrl/img/site-images/logo-nobg.png",
+        "image": "@siteBaseUrl/img/site-images/logo-nobg.png",
         "description": "DEVNET SYSTEMS is a premier IT solutions provider with 20+ years of experience delivering web, mobile, and bespoke software development services.",
         "email": "info@@devnetsystems.com",
         "telephone": "+44 7864 356775",
@@ -87,14 +94,14 @@
     {
         "@@context": "https://schema.org",
         "@@type": "WebSite",
-        "@@id": "@(SiteOptions.Value.BaseUrl.TrimEnd('/'))/#website",
-        "name": "@SiteOptions.Value.Name",
-        "url": "@SiteOptions.Value.BaseUrl",
+        "@@id": "@siteBaseUrl/#website",
+        "name": "@siteDisplayName",
+        "url": "@siteBaseUrl",
         "inLanguage": "en-GB",
-        "publisher": { "@@type": "Organization", "@@id": "@(SiteOptions.Value.BaseUrl.TrimEnd('/'))/#organization" },
+        "publisher": { "@@type": "Organization", "@@id": "@siteBaseUrl/#organization" },
         "potentialAction": {
             "@@type": "SearchAction",
-            "target": "@(SiteOptions.Value.BaseUrl.TrimEnd('/'))/?q={search_term_string}",
+            "target": "@siteBaseUrl/?q={search_term_string}",
             "query-input": "required name=search_term_string"
         }
     }

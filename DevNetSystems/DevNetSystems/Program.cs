@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Rewrite;
 using DevNetSystems.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -6,6 +5,16 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddScoped<DevNetSystems.Services.IEmailService, DevNetSystems.Services.EmailService>();
 builder.Services.Configure<SiteSettings>(builder.Configuration.GetSection("Site"));
+
+// Generate lowercase URLs from every link helper (asp-page, asp-controller, etc.) so internal
+// links never hit the lowercase 301 redirect — eliminates the "Page with redirect" Search Console
+// flag for internal navigation and removes a pile of soft-404 / redirect chains.
+builder.Services.Configure<Microsoft.AspNetCore.Routing.RouteOptions>(options =>
+{
+    options.LowercaseUrls = true;
+    options.LowercaseQueryStrings = false; // query values are case-sensitive (e.g. tracking codes)
+    options.AppendTrailingSlash = false;
+});
 
 builder.Services.AddHsts(options =>
 {
@@ -31,32 +40,69 @@ if (!app.Environment.IsDevelopment())
     app.UseHttpsRedirection();
 }
 
-// SEO normalization rules:
-//   1. Strip trailing slash (except root): /about/ -> /about (301)
-//   2. Lowercase the path: /About -> /about (301) so we don't have two URLs for the same page.
-//      Skip query strings and asset paths to avoid breaking case-sensitive deployments.
-var rewriteOptions = new RewriteOptions()
-    .AddRedirect(@"^(.+)/$", "$1", (int)System.Net.HttpStatusCode.MovedPermanently);
-app.UseRewriter(rewriteOptions);
+// Single-pass URL canonicalization — consolidates all normalization into ONE 301 hop so
+// Search Console never sees multi-hop redirect chains (it de-prioritises those as "Page with
+// redirect"). Rules applied in priority order:
+//   - /Index, /Home, /Default (and .html/.htm/.aspx/.php variants) → "/"
+//   - Strip legacy file extensions: /about.html → /about
+//   - Strip trailing slash (except root)
+//   - Lowercase the path
+// Static asset paths (/lib, /vendor, /img, /css, /js) are skipped entirely.
+var legacyDocRegex = new System.Text.RegularExpressions.Regex(
+    @"^/(index|home|default)(\.(html?|aspx?|php))?$",
+    System.Text.RegularExpressions.RegexOptions.IgnoreCase | System.Text.RegularExpressions.RegexOptions.Compiled);
+var extensionRegex = new System.Text.RegularExpressions.Regex(
+    @"^(.+)\.(html?|aspx?|php)$",
+    System.Text.RegularExpressions.RegexOptions.IgnoreCase | System.Text.RegularExpressions.RegexOptions.Compiled);
 
 app.Use(async (context, next) =>
 {
     var path = context.Request.Path.Value;
-    if (!string.IsNullOrEmpty(path) && path.Length > 1)
+    if (string.IsNullOrEmpty(path) || path.Length <= 1)
     {
-        var lower = path.ToLowerInvariant();
-        if (!string.Equals(path, lower, StringComparison.Ordinal)
-            && !path.StartsWith("/lib/", StringComparison.OrdinalIgnoreCase)
-            && !path.StartsWith("/vendor/", StringComparison.OrdinalIgnoreCase)
-            && !path.StartsWith("/img/", StringComparison.OrdinalIgnoreCase)
-            && !path.StartsWith("/css/", StringComparison.OrdinalIgnoreCase)
-            && !path.StartsWith("/js/", StringComparison.OrdinalIgnoreCase))
-        {
-            var qs = context.Request.QueryString.HasValue ? context.Request.QueryString.Value : string.Empty;
-            context.Response.Redirect(lower + qs, permanent: true);
-            return;
-        }
+        await next();
+        return;
     }
+
+    if (path.StartsWith("/lib/", StringComparison.OrdinalIgnoreCase)
+        || path.StartsWith("/vendor/", StringComparison.OrdinalIgnoreCase)
+        || path.StartsWith("/img/", StringComparison.OrdinalIgnoreCase)
+        || path.StartsWith("/css/", StringComparison.OrdinalIgnoreCase)
+        || path.StartsWith("/js/", StringComparison.OrdinalIgnoreCase))
+    {
+        await next();
+        return;
+    }
+
+    string normalized;
+
+    if (legacyDocRegex.IsMatch(path))
+    {
+        normalized = "/";
+    }
+    else
+    {
+        normalized = path;
+        // Strip trailing slash before extension so /About.html/ -> /about in one hop.
+        if (normalized.Length > 1 && normalized.EndsWith('/'))
+        {
+            normalized = normalized[..^1];
+        }
+        var extMatch = extensionRegex.Match(normalized);
+        if (extMatch.Success)
+        {
+            normalized = extMatch.Groups[1].Value;
+        }
+        normalized = normalized.ToLowerInvariant();
+    }
+
+    if (!string.Equals(path, normalized, StringComparison.Ordinal))
+    {
+        var qs = context.Request.QueryString.HasValue ? context.Request.QueryString.Value : string.Empty;
+        context.Response.Redirect(normalized + qs, permanent: true);
+        return;
+    }
+
     await next();
 });
 
