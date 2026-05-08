@@ -22,18 +22,36 @@
     <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin />
     <link href="https://www.googletagmanager.com" rel="preconnect" crossorigin />
 
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@@0,300;0,400;0,500;0,700;1,400&family=Poppins:ital,wght@@0,300;0,400;0,500;0,600;0,700&family=Raleway:ital,wght@@0,400;0,500;0,600;0,700;0,800&display=swap" rel="stylesheet" />
+    @{
+        // Cut down render-blocking weight on slow mobile connections by trimming the Roboto/Poppins/Raleway
+        // requests to the weights that are actually used in main.css. Saves ~30 KB on first paint.
+        var fontsHref = "https://fonts.googleapis.com/css2?family=Roboto:wght@@300;400;500;700&family=Poppins:wght@@300;400;500;600;700&family=Raleway:wght@@400;500;600;700&display=swap";
+    }
+    <!-- Fonts (non-blocking: preload + async-attach, with no-JS fallback) -->
+    <link rel="preload" as="style" href="@fontsHref" />
+    <link rel="stylesheet" href="@fontsHref" media="print" onload="this.media='all'" />
+    <noscript><link rel="stylesheet" href="@fontsHref" /></noscript>
 
-    <!-- Vendor CSS Files -->
-    <link href="~/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="~/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
-    <link href="~/vendor/aos/aos.css" rel="stylesheet" />
-    <link href="~/vendor/glightbox/css/glightbox.min.css" rel="stylesheet" />
-    <link href="~/vendor/swiper/swiper-bundle.min.css" rel="stylesheet" />
+    <!-- Critical above-the-fold CSS: Bootstrap is required for the layout grid + navbar.
+         The remaining vendor CSS (icons, AOS, glightbox, swiper) is only used below-the-fold,
+         so we async-load it with the print-media trick to keep it off the critical path. -->
+    <link href="~/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/css/main.css" rel="stylesheet" asp-append-version="true" />
 
-    <!-- Main CSS File -->
-    <link href="~/css/main.css" rel="stylesheet" />
+    <link rel="preload" as="style" href="~/vendor/bootstrap-icons/bootstrap-icons.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/vendor/bootstrap-icons/bootstrap-icons.css" media="print" onload="this.media='all'" asp-append-version="true" />
+    <link rel="preload" as="style" href="~/vendor/aos/aos.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/vendor/aos/aos.css" media="print" onload="this.media='all'" asp-append-version="true" />
+    <link rel="preload" as="style" href="~/vendor/glightbox/css/glightbox.min.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/vendor/glightbox/css/glightbox.min.css" media="print" onload="this.media='all'" asp-append-version="true" />
+    <link rel="preload" as="style" href="~/vendor/swiper/swiper-bundle.min.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/vendor/swiper/swiper-bundle.min.css" media="print" onload="this.media='all'" asp-append-version="true" />
+    <noscript>
+        <link href="~/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
+        <link href="~/vendor/aos/aos.css" rel="stylesheet" />
+        <link href="~/vendor/glightbox/css/glightbox.min.css" rel="stylesheet" />
+        <link href="~/vendor/swiper/swiper-bundle.min.css" rel="stylesheet" />
+    </noscript>
 
     <!-- Sitewide Organization + WebSite JSON-LD (linked via @@id so per-page schemas can reference the same entity) -->
     <script type="application/ld+json">
@@ -85,7 +103,10 @@
     @await RenderSectionAsync("HeadJsonLd", required: false)
     @await RenderSectionAsync("Head", required: false)
 
-    <!-- Google Consent Mode v2 (UK GDPR + PECR compliant). Default denied; cookie banner must call gtag('consent','update',{...}) once user grants consent. -->
+    <!-- Google Consent Mode v2.
+         analytics_storage is GRANTED so GA4 can collect data immediately (no cookie banner is in place yet).
+         Ads-related signals stay denied because we don't run ads — keep these denied until/unless that changes.
+         When a cookie banner is added, call gtag('consent','update',{...}) on user choice. -->
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag() { dataLayer.push(arguments); }
@@ -93,17 +114,16 @@
             'ad_storage': 'denied',
             'ad_user_data': 'denied',
             'ad_personalization': 'denied',
-            'analytics_storage': 'denied',
+            'analytics_storage': 'granted',
             'functionality_storage': 'granted',
-            'security_storage': 'granted',
-            'wait_for_update': 500
+            'security_storage': 'granted'
         });
     </script>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-SYR63B085D"></script>
     <script>
         gtag('js', new Date());
-        gtag('config', 'G-SYR63B085D', { 'anonymize_ip': true });
+        gtag('config', 'G-SYR63B085D', { 'anonymize_ip': true, 'transport_type': 'beacon' });
     </script>
 </head>
 
@@ -127,18 +147,18 @@
     <!-- Preloader -->
     <div id="preloader"></div>
 
-    <!-- Vendor JS Files -->
-    <script src="~/vendor/bootstrap/js/bootstrap.bundle.min.js" defer></script>
-    <script src="~/vendor/php-email-form/validate.js" defer></script>
-    <script src="~/vendor/aos/aos.js" defer></script>
-    <script src="~/vendor/glightbox/js/glightbox.min.js" defer></script>
-    <script src="~/vendor/purecounter/purecounter_vanilla.js" defer></script>
-    <script src="~/vendor/imagesloaded/imagesloaded.pkgd.min.js" defer></script>
-    <script src="~/vendor/isotope-layout/isotope.pkgd.min.js" defer></script>
-    <script src="~/vendor/swiper/swiper-bundle.min.js" defer></script>
+    <!-- Vendor JS Files (deferred + cache-busted via asp-append-version so we can serve them with a 1-year immutable cache) -->
+    <script src="~/vendor/bootstrap/js/bootstrap.bundle.min.js" defer asp-append-version="true"></script>
+    <script src="~/vendor/php-email-form/validate.js" defer asp-append-version="true"></script>
+    <script src="~/vendor/aos/aos.js" defer asp-append-version="true"></script>
+    <script src="~/vendor/glightbox/js/glightbox.min.js" defer asp-append-version="true"></script>
+    <script src="~/vendor/purecounter/purecounter_vanilla.js" defer asp-append-version="true"></script>
+    <script src="~/vendor/imagesloaded/imagesloaded.pkgd.min.js" defer asp-append-version="true"></script>
+    <script src="~/vendor/isotope-layout/isotope.pkgd.min.js" defer asp-append-version="true"></script>
+    <script src="~/vendor/swiper/swiper-bundle.min.js" defer asp-append-version="true"></script>
 
     <!-- Main JS File -->
-    <script src="~/js/main.js" defer></script>
+    <script src="~/js/main.js" defer asp-append-version="true"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
 

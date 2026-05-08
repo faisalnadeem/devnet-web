@@ -76,15 +76,34 @@ app.UseStaticFiles(new StaticFileOptions
 {
     OnPrepareResponse = ctx =>
     {
-        var path = ctx.File.Name.ToLowerInvariant();
+        var fileName = ctx.File.Name.ToLowerInvariant();
         var headers = ctx.Context.Response.GetTypedHeaders();
+        var query = ctx.Context.Request.Query;
 
-        if (path.EndsWith(".css") || path.EndsWith(".js")
-            || path.EndsWith(".woff") || path.EndsWith(".woff2") || path.EndsWith(".ttf")
-            || path.EndsWith(".jpg") || path.EndsWith(".jpeg") || path.EndsWith(".png")
-            || path.EndsWith(".webp") || path.EndsWith(".svg") || path.EndsWith(".ico")
-            || path.EndsWith(".gif") || path.EndsWith(".avif"))
+        // Fingerprinted assets (requested with ?v=<hash> via asp-append-version) are content-addressed,
+        // so they're safe to cache for a year as immutable. PageSpeed wants >= 1y for static assets,
+        // and "immutable" stops the browser from sending revalidation requests.
+        var hasVersionQuery = query.ContainsKey("v");
+
+        var isStaticAsset = fileName.EndsWith(".css") || fileName.EndsWith(".js")
+            || fileName.EndsWith(".woff") || fileName.EndsWith(".woff2") || fileName.EndsWith(".ttf") || fileName.EndsWith(".otf") || fileName.EndsWith(".eot")
+            || fileName.EndsWith(".jpg") || fileName.EndsWith(".jpeg") || fileName.EndsWith(".png")
+            || fileName.EndsWith(".webp") || fileName.EndsWith(".svg") || fileName.EndsWith(".ico")
+            || fileName.EndsWith(".gif") || fileName.EndsWith(".avif");
+
+        if (isStaticAsset && hasVersionQuery)
         {
+            headers.CacheControl = new Microsoft.Net.Http.Headers.CacheControlHeaderValue
+            {
+                Public = true,
+                MaxAge = TimeSpan.FromDays(365),
+                Extensions = { new Microsoft.Net.Http.Headers.NameValueHeaderValue("immutable") }
+            };
+        }
+        else if (isStaticAsset)
+        {
+            // Unversioned (e.g. images referenced directly from CSS without ?v). 30 days is the
+            // Lighthouse minimum that still scores green on the cache-policy audit.
             headers.CacheControl = new Microsoft.Net.Http.Headers.CacheControlHeaderValue
             {
                 Public = true,
