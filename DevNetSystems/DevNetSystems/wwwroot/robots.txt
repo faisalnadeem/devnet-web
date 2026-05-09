@@ -11,18 +11,8 @@ Disallow: /lib/
 Disallow: /vendor/
 Disallow: /scss/
 
-# Block any query-string crawl waste. The site has no legitimate page-state in query strings
-# (only GA4 attribution params, which Google handles separately), so disallowing all query
-# strings drops a ton of duplicate-content + soft-404 noise. The middleware also 301-strips
-# non-allowlisted params, but listing common WordPress-shape patterns explicitly speeds Google
-# up on dropping them.
+# Block any query-string crawl waste
 Disallow: /*?*
-Disallow: /*?webteck_header=
-Disallow: /*?webteck_footer_build=
-Disallow: /*?p=
-Disallow: /*?feed=
-Disallow: /*?s=
-Disallow: /*?replytocom=
 
 # Crawl delay (polite default)
 Crawl-delay: 1

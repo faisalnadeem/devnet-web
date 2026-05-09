@@ -43,14 +43,10 @@ if (!app.Environment.IsDevelopment())
 // Single-pass URL canonicalization — consolidates all normalization into ONE 301 hop so
 // Search Console never sees multi-hop redirect chains (it de-prioritises those as "Page with
 // redirect"). Rules applied in priority order:
-//   - bare-domain → www.devnetsystems.com (fixes the "Page with redirect" flag for the apex)
 //   - /Index, /Home, /Default (and .html/.htm/.aspx/.php variants) → "/"
 //   - Strip legacy file extensions: /about.html → /about
 //   - Strip trailing slash (except root)
 //   - Lowercase the path
-//   - Strip non-allowlisted query parameters (kills the WordPress-shape junk like
-//     ?webteck_header=, ?p=1, ?feed=comments-rss2 that Search Console listed as
-//     "Crawled but not indexed" / "Duplicate without canonical" / "Excluded by noindex")
 // Static asset paths (/lib, /vendor, /img, /css, /js) are skipped entirely.
 var legacyDocRegex = new System.Text.RegularExpressions.Regex(
     @"^/(index|home|default)(\.(html?|aspx?|php))?$",
@@ -59,39 +55,15 @@ var extensionRegex = new System.Text.RegularExpressions.Regex(
     @"^(.+)\.(html?|aspx?|php)$",
     System.Text.RegularExpressions.RegexOptions.IgnoreCase | System.Text.RegularExpressions.RegexOptions.Compiled);
 
-// Tracking + attribution params that legitimately need to ride through. Anything outside this
-// set is stripped via 301 — that's how we collapse the WordPress-shape spam URLs Search Console
-// was flagging. UTM and click-IDs stay because GA4 reads them client-side from location.search.
-var allowedQueryParams = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
-{
-    "utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term", "utm_id",
-    "gclid", "gbraid", "wbraid", "dclid",   // Google Ads
-    "fbclid",                                // Facebook
-    "msclkid",                               // Microsoft Ads
-    "ttclid",                                // TikTok
-    "twclid",                                // X / Twitter
-    "li_fat_id",                             // LinkedIn
-    "epik",                                  // Pinterest
-    "_ga", "_gl",                            // Google Analytics cross-domain
-    "ref"                                    // generic referrer marker we may use ourselves
-};
-
-// Hosts we should leave alone — anything inside this set is treated as already-canonical.
-// Any other host that isn't www.devnetsystems.com gets 301'd to www.devnetsystems.com so
-// the apex (devnetsystems.com) and any IP-style or alternate hostnames consolidate to one.
-const string CanonicalHost = "www.devnetsystems.com";
-var hostsToLeaveAlone = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
-{
-    "localhost",
-    "127.0.0.1",
-    "::1"
-};
-
 app.Use(async (context, next) =>
 {
-    var path = context.Request.Path.Value ?? "/";
+    var path = context.Request.Path.Value;
+    if (string.IsNullOrEmpty(path) || path.Length <= 1)
+    {
+        await next();
+        return;
+    }
 
-    // 1) Asset paths: bypass everything to keep the cache-busted ?v= query intact.
     if (path.StartsWith("/lib/", StringComparison.OrdinalIgnoreCase)
         || path.StartsWith("/vendor/", StringComparison.OrdinalIgnoreCase)
         || path.StartsWith("/img/", StringComparison.OrdinalIgnoreCase)
@@ -102,83 +74,32 @@ app.Use(async (context, next) =>
         return;
     }
 
-    // 2) Compute the canonical path.
-    string normalizedPath;
-    if (path.Length <= 1)
+    string normalized;
+
+    if (legacyDocRegex.IsMatch(path))
     {
-        normalizedPath = "/";
-    }
-    else if (legacyDocRegex.IsMatch(path))
-    {
-        normalizedPath = "/";
+        normalized = "/";
     }
     else
     {
-        normalizedPath = path;
-        if (normalizedPath.Length > 1 && normalizedPath.EndsWith('/'))
+        normalized = path;
+        // Strip trailing slash before extension so /About.html/ -> /about in one hop.
+        if (normalized.Length > 1 && normalized.EndsWith('/'))
         {
-            normalizedPath = normalizedPath[..^1];
+            normalized = normalized[..^1];
         }
-        var extMatch = extensionRegex.Match(normalizedPath);
+        var extMatch = extensionRegex.Match(normalized);
         if (extMatch.Success)
         {
-            normalizedPath = extMatch.Groups[1].Value;
+            normalized = extMatch.Groups[1].Value;
         }
-        normalizedPath = normalizedPath.ToLowerInvariant();
+        normalized = normalized.ToLowerInvariant();
     }
 
-    // 3) Compute the canonical query string — keep only allowlisted params, in the order
-    //    they appeared, with values intact. Everything else is stripped.
-    var originalQs = context.Request.QueryString.HasValue ? context.Request.QueryString.Value! : string.Empty;
-    string normalizedQs;
-    if (string.IsNullOrEmpty(originalQs))
+    if (!string.Equals(path, normalized, StringComparison.Ordinal))
     {
-        normalizedQs = string.Empty;
-    }
-    else
-    {
-        var kept = new List<string>();
-        foreach (var pair in context.Request.Query)
-        {
-            if (allowedQueryParams.Contains(pair.Key))
-            {
-                foreach (var v in pair.Value)
-                {
-                    kept.Add(Uri.EscapeDataString(pair.Key) + (v is null ? "" : "=" + Uri.EscapeDataString(v)));
-                }
-            }
-        }
-        normalizedQs = kept.Count == 0 ? string.Empty : "?" + string.Join("&", kept);
-    }
-
-    // 4) Compute the canonical host. In dev (localhost/127.0.0.1/etc.) we never rewrite the
-    //    host — that would break local testing. In prod, anything other than CanonicalHost
-    //    redirects to CanonicalHost (this is what fixes the bare-domain "Page with redirect"
-    //    flag — devnetsystems.com -> www.devnetsystems.com).
-    var requestHost = context.Request.Host;
-    var hostName = requestHost.Host;
-    var needsHostRewrite = !hostsToLeaveAlone.Contains(hostName)
-                           && !string.Equals(hostName, CanonicalHost, StringComparison.OrdinalIgnoreCase);
-
-    // 5) Decide whether to redirect. Combining all changes into ONE 301 keeps Google's "single
-    //    redirect hop" expectation satisfied no matter how many normalization rules fire.
-    var pathChanged = !string.Equals(path, normalizedPath, StringComparison.Ordinal);
-    var queryChanged = !string.Equals(originalQs, normalizedQs, StringComparison.Ordinal);
-
-    if (pathChanged || queryChanged || needsHostRewrite)
-    {
-        string target;
-        if (needsHostRewrite)
-        {
-            // Always go straight to https on the canonical host — even if the inbound was http,
-            // we'd otherwise force two hops (host fix, then https upgrade).
-            target = "https://" + CanonicalHost + normalizedPath + normalizedQs;
-        }
-        else
-        {
-            target = normalizedPath + normalizedQs;
-        }
-        context.Response.Redirect(target, permanent: true);
+        var qs = context.Request.QueryString.HasValue ? context.Request.QueryString.Value : string.Empty;
+        context.Response.Redirect(normalized + qs, permanent: true);
         return;
     }
 
