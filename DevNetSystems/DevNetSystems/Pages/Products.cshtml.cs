@@ -42,10 +42,10 @@ namespace DevNetSystems.Pages
                 },
                 new ProductItem
                 {
-                    Title = "Aythen",
-                    Description = "Aythen is an AI-powered conversational platform that helps businesses automatically capture and engage leads from Facebook in real time. It uses intelligent question flows and eligibility logic to qualify prospects instantly. By automating conversations and lead screening, Aythen enables faster responses, improved engagement, and higher conversion rates with minimal manual effort.",
+                    Title = "Aythn",
+                    Description = "Aythn is an AI-powered conversational platform that helps businesses automatically capture and engage leads from Facebook in real time. It uses intelligent question flows and eligibility logic to qualify prospects instantly. By automating conversations and lead screening, Aythen enables faster responses, improved engagement, and higher conversion rates with minimal manual effort.",
                     ImagePath = "img/site-images/aythen.jpg",
-                    SitePath = "https://aythen.com"
+                    SitePath = "https://aythn.com"
                 },
                 new ProductItem
                 {
@@ -74,6 +74,13 @@ namespace DevNetSystems.Pages
                     Description = "MLR360 is an advanced medico-legal documentation platform that automates detailed medical reporting for road traffic and workplace injuries. It generates structured reports covering accident scenarios, injury details, clinical findings, and prognosis. These court-ready reports help doctors, legal professionals, and insurers clearly understand patient conditions with complete analysis and context.",
                     ImagePath = "img/site-images/mlr.jpg",
                     SitePath = "https://www.mlr360.com/"
+                },
+                new ProductItem
+                {
+                    Title = "PassKnots",
+                    Description = "PassKnots Vault is a secure password manager web app where each user’s entries are encrypted with their own master key. Users can store site credentials, organize their vault, and share entries with others by email, with optional invites for recipients who do not yet have an account.",
+                    ImagePath = "img/site-images/PassKnots.png",
+                    SitePath = "https://www.passknots.com/"
                 }
             };
         }
